@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-<title>Flask App</title>
+    <title>Flask App</title>
   </head>
   <body>
 
@@ -16,5 +16,14 @@
       {% endblock %}
     </div>
 
+    <hr> <br>
+    {% if bodyText%}
+       {{ bodyText }}
+    {% else %}
+      <h1>Default</h1>
+    {% endif %}
+
+    <img id="bg" src="{{ url_for('video_feed') }}">
+    <br>
   </body>
 </html>
