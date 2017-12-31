@@ -4,14 +4,14 @@ from camera import VideoCamera
 
 app = Flask(__name__)
 
+#Video streaming generator function
 def gen(camera):
     while True:
         frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-
+#Video streaming home page
 @app.route('/')
 def home():
     return render_template('layout.html')

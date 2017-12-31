@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Flask App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
 
@@ -23,6 +24,7 @@
       <h1>Default</h1>
     {% endif %}
 
+    <!--Put the streaming in the page*/-->
     <img id="bg" src="{{ url_for('video_feed') }}">
     <br>
   </body>
