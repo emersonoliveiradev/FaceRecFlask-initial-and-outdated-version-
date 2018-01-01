@@ -4,6 +4,7 @@ from capture import Capture
 import numpy as np
 import cv2
 
+#Create to interpreter of python, control the all aplication
 app = Flask(__name__)
 
 #Video streaming generator function
@@ -20,7 +21,7 @@ def home():
 
 @app.route('/face_capture')
 def face_capture():
-    return render_template('layout.html')
+    return render_template('capture.html')
 
 @app.route('/video_feed')
 def video_feed():
@@ -29,3 +30,4 @@ def video_feed():
 
 if __name__ == '__main__':
     app.run(debug=True)
+

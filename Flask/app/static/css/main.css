@@ -62,3 +62,11 @@ h3 {
   letter-spacing: -1px;
   color: #999;
 }
+
+.window_capture {
+    border: 15px solid #555555;
+}
+
+.bg{
+    align: center;
+}

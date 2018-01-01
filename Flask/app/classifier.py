@@ -2,8 +2,8 @@ import cv2
 
 class Classifier(object):
     def __init__(self):
-        self.classifier_face = cv2.CascadeClassifier("classifiers/haarcascade-frontalface-default.xml")
-        self.classifier_eye = cv2.CascadeClassifier("classifiers/haarcascade-eye.xml")
+        self.classifier_face = cv2.CascadeClassifier("static/classifiers/haarcascade-frontalface-default.xml")
+        self.classifier_eye = cv2.CascadeClassifier("static/classifiers/haarcascade-eye.xml")
 
 
     def get_face_classifier(self):

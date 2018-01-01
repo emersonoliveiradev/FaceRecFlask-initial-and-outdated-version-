@@ -45,7 +45,6 @@ class Capture(object):
             self.show_frame = colorful_frame.copy()
             gray_frame = cv2.cvtColor(colorful_frame.copy(), cv2.COLOR_BGR2GRAY)
 
-
             detected_faces = self.face_classifier.detectMultiScale(gray_frame, scaleFactor=1.5, minSize=(50, 50))
             if type(detected_faces) != tuple:
                 gray_frame, face_resize = self.found_classifier_face(detected_faces, gray_frame)
@@ -64,15 +63,12 @@ class Capture(object):
                 #cv2.waitKey(1)
 
 
-# cap = Capture()
-# face = cap.get_eye_classifier()
-# print(type(face))
-# cap.capture()
+if __name__ == '__main__':
+    cap = Capture()
+    cap.capture()
 
-# Criar o objeto ou retornar através do Classifier???????????
-            
-            
-
-
+#face = cap.get_eye_classifier()
 #cap = Capture()
 #cap.capture()
+
+# Criar o objeto ou retornar através do Classifier???????????
