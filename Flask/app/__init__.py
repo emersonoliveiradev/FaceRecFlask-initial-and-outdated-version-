@@ -9,7 +9,7 @@ from flask_migrate import Migrate, MigrateCommand
 app = Flask(__name__)
 
 #Create config of db and db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///storage.db'
+app.config.from_object('config')
 db = SQLAlchemy(app)
 
 #Create instance migrate - Aplication and my DataBase
