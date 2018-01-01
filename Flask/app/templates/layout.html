@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Flask App</title>
+    <title>VisionLab App</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   </head>
   <body>
 
     <header>
       <div class="container">
-        <h1 class="logo">Flask App</h1>
+        <h1 class="logo">VisionLab App</h1>
       </div>
     </header>
 
@@ -21,7 +21,7 @@
     {% if bodyText%}
        {{ bodyText }}
     {% else %}
-      <h1>Default</h1>
+      <h1>Window</h1>
     {% endif %}
 
     <!--Put the streaming in the page*/-->

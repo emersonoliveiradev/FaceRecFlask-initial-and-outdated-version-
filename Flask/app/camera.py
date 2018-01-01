@@ -7,11 +7,16 @@ class VideoCamera(object):
     def __del__(self):
         self.cap.release()
 
-    def get_frame(self):
+    def get_decoded_frame(self):
+        ret, frame = self.cap.read()
+        return frame
+
+    def get_encoded_frame(self):
         ret, frame = self.cap.read()
         #Encode frame
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tostring()
+
 
 
 
