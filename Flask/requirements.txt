@@ -2,6 +2,7 @@ click==6.7
 cycler==0.10.0
 dlib==19.8.1
 Flask==0.12.2
+Flask-SQLAlchemy==2.3.2
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
@@ -13,5 +14,6 @@ pyparsing==2.2.0
 python-dateutil==2.6.1
 pytz==2017.3
 six==1.11.0
+SQLAlchemy==1.2.0
 svgwrite==1.1.12
 Werkzeug==0.13
