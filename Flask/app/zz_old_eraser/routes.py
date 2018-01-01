@@ -1,3 +1,4 @@
+from app import app
 from flask import Flask, render_template, Response
 from camera import VideoCamera
 from capture import Capture
@@ -12,6 +13,12 @@ def gen(camera):
     while True:
         frame = camera.get_encoded_frame()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+#Video streaming home page
+@app.route('/')
+def index():
+    return render_template('layout.html')
+
 
 
 #Video streaming home page
