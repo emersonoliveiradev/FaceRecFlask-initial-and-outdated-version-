@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>VisionLab App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}">  </script>
+    <script src="{{ url_for('static', filename='jquery/src/jquery.js') }}">  </script>
+  </head>
+  <body>
+<work></work>
+    <header>
+      <div class="container">
+          <h1 class="logo">VisionLab App</h1>
+      </div>
+    </header>
+
+    {% if name %}
+    <p class="msgm">Seja bem vindo, {{ name }}!</p>
+    {% else %}
+    <p class="msgm">Seja bem vindo! </p>
+    {% endif %}
+  </body>
+</html>

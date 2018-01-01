@@ -7,9 +7,20 @@ from app.controllers.generator import Generator
 
 
 # The 'render_template, search in path templates automatically by default
+# Can be more on route
+@app.route('/home')
+@app.route('/index')
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# Receive variable <name>
+@app.route('/test', defaults={"name": None})
+@app.route('/test/<name>')
+def show_name(name):
+    return render_template('test.html', name=name)
+
+
 
 
 @app.route('/face_capture')
