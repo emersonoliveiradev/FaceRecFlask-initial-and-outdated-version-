@@ -1,7 +1,10 @@
 import cv2
 import numpy as np
-from app.controllers.classifier import Classifier
+from copy import copy
+#A diferença está aqui... mas oq???? Por que com o caminho completo não funciona???
+from classifier import Classifier
 from app.controllers.generator import Generator
+
 
 class Capture(object):
     def __init__(self):
@@ -14,6 +17,7 @@ class Capture(object):
         self.width = 220
         self.height = 220
         self.show_frame = None
+        self.gray_frame = None
         # Remake here!!!!!!!!
         self.id = 5
         self.sample = 1
@@ -40,17 +44,23 @@ class Capture(object):
 
     def capture(self):
         while(True):
-            colorful_frame = self.gen.get_decoded_frame()
-            self.show_frame = colorful_frame.copy()
-            gray_frame = cv2.cvtColor(colorful_frame.copy(), cv2.COLOR_BGR2GRAY)
+            self.show_frame = self.gen.get_decoded_frame()
+            self.gray_frame = cv2.cvtColor(self.show_frame, cv2.COLOR_BGR2GRAY)
 
-            detected_faces = self.face_classifier.detectMultiScale(gray_frame, scaleFactor=1.5, minSize=(50, 50))
+
+
+            detected_faces = self.face_classifier.detectMultiScale(self.gray_frame, scaleFactor=1.5, minSize=(50, 50))
+            print("Passou!!!!!!!!!!!")
+            #ret, jpeg = cv2.imencode('.jpg', self.show_frame)
+            #return jpeg.tostring()
+
             if type(detected_faces) != tuple:
-                gray_frame, face_resize = self.found_classifier_face(detected_faces, gray_frame)
+                print("Entrou1")
+                gray_frame, face_resize = self.found_classifier_face(detected_faces, self.gray_frame)
 
-                detected_eyes = self.eye_classifier.detectMultiScale(gray_frame, minSize=(20, 20))
-                gray_frame = self.found_classifier_eye(detected_eyes, gray_frame)
-
+                detected_eyes = self.eye_classifier.detectMultiScale(self.gray_frame, minSize=(20, 20))
+                self.gray_frame = self.found_classifier_eye(detected_eyes, self.gray_frame)
+                print("Entrou2")
                 if cv2.waitKey(1) & 0xFF == ord("c"):
                     print("Entrou")
                     cv2.imwrite("database_faces/user." + str(self.id) + "." + str(self.sample) + ".jpg", face_resize)
@@ -58,9 +68,15 @@ class Capture(object):
                     self.sample += 1
 
 
-                print("ok")
-                cv2.imshow("Show Colorful", self.show_frame)
-                cv2.waitKey(1)
+            ret, jpeg = cv2.imencode('.jpg', self.show_frame)
+            print(type("Retornandoooooooooooooooooooooooooooooooooooo"))
+            return jpeg.tostring()
+
+
+                #print("ok")ls
+            
+                #cv2.imshow("Show Colorful", self.show_frame)
+                #cv2.waitKey(1)
 
 
 if __name__ == '__main__':

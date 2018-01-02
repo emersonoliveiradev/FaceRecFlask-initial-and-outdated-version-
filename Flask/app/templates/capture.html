@@ -1,21 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>VisionLab App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-  </head>
-  <body>
-
-    <header>
-      <div class="container">
-        <h1 class="logo">VisionLab App</h1>
-      </div>
-    </header>
-
-    <div class="container">
-      {% block content %}
-      {% endblock %}
-    </div>
+{% include 'base/head.html' %}
+{% include 'base/header.html' %}
 
     <hr> <br>
     {% if bodyText%}
@@ -26,8 +10,7 @@
 
     <!--Put the streaming in the page*/-->
     <div class="window_capture">
-      <img id="bg" src="{{ url_for('video_feed') }}">
+      <img id="bg" src="{{ url_for('face_capture') }}">
     </div>
-    <br>
-  </body>
-</html>
+
+{% include 'base/footer.html' %}

@@ -1,0 +1,10 @@
+{% include 'base/head.html' %}
+{% include 'base/header.html' %}
+
+{% block content %}
+    {{ form.username }}
+    {{ form.password }}
+    {{ form.remember_me }}
+{% endblock%}
+
+{% include 'base/footer.html' %}

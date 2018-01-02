@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>HomePage</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <h1 class="logo">VisionLab App</h1>
-        </div>
-    </header>
+{% include 'base/head.html' %}
+{% include 'base/header.html' %}
 
-</body>
-</html>
+<h1>Index</h1>
+
+{% include 'base/footer.html' %}
