@@ -44,39 +44,24 @@ class Capture(object):
 
     def capture(self):
         while(True):
+            print("Running")
             self.show_frame = self.gen.get_decoded_frame()
             self.gray_frame = cv2.cvtColor(self.show_frame, cv2.COLOR_BGR2GRAY)
 
-
-
             detected_faces = self.face_classifier.detectMultiScale(self.gray_frame, scaleFactor=1.5, minSize=(50, 50))
-            print("Passou!!!!!!!!!!!")
-            #ret, jpeg = cv2.imencode('.jpg', self.show_frame)
-            #return jpeg.tostring()
 
-            if type(detected_faces) != tuple:
-                print("Entrou1")
+            if type(detected_faces) != tuple:                
                 gray_frame, face_resize = self.found_classifier_face(detected_faces, self.gray_frame)
 
                 detected_eyes = self.eye_classifier.detectMultiScale(self.gray_frame, minSize=(20, 20))
-                self.gray_frame = self.found_classifier_eye(detected_eyes, self.gray_frame)
-                print("Entrou2")
+                self.gray_frame = self.found_classifier_eye(detected_eyes, self.gray_frame)                
                 if cv2.waitKey(1) & 0xFF == ord("c"):
-                    print("Entrou")
                     cv2.imwrite("database_faces/user." + str(self.id) + "." + str(self.sample) + ".jpg", face_resize)
                     print("Face" + str(self.sample) + " captured")
                     self.sample += 1
 
-
             ret, jpeg = cv2.imencode('.jpg', self.show_frame)
-            print(type("Retornandoooooooooooooooooooooooooooooooooooo"))
             return jpeg.tostring()
-
-
-                #print("ok")ls
-            
-                #cv2.imshow("Show Colorful", self.show_frame)
-                #cv2.waitKey(1)
 
 
 if __name__ == '__main__':

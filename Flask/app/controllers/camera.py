@@ -15,7 +15,6 @@ class VideoCamera(object):
         ret, frame = self.cap.read()
         #Encode frame
         ret, jpeg = cv2.imencode('.jpg', frame)
-        print(type(jpeg))
         return jpeg.tostring()
 
     def get_frame(self):

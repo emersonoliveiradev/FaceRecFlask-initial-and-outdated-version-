@@ -29,6 +29,11 @@ def login():
     return render_template('login.html', form=form)
 
 
+def gen(camera):
+    while True:
+        frame = camera.get_encoded_frame()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
 #Video streaming generator function
 def gen2():
     cap = Capture()
@@ -40,19 +45,20 @@ def gen2():
 def face_capture():
     return Response(gen2(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
-
-#Video streaming generator function
-def gen(camera):
-    while True:
-        frame = camera.get_encoded_frame()
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+@app.route("/show_capture")
+def show_capture():
+    return render_template('capture.html')
 
 
 @app.route('/video_feed')
 def video_feed():
     #Retorna o que o gerador (função gen()) está gerando
     return Response(gen(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+#Video streaming generator function
+
+
+
 
 
 if __name__ == '__main__':
