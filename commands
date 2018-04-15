@@ -1,0 +1,20 @@
+Rodar projeto
+$ python run.py runsever
+
+Criar pasta migrate and others files in side...
+$ python run.py db init
+
+Compara com o que já existe
+Migrar banco de dados, mas ainda não aplica... caso possa ocorrer algum erro
+$ python run.py db migrate
+
+Aplicar mudanças/migração
+$ python run.py db upgrade
+
+
+### Toda alteração na estrutura do banco de dados tenho que executar
+$ python run.py db migrate
+$ python run.py db upgrade
+
+
+#Caso usar o mysql, criar o banco de dados antes e conectá-lo na aplicação

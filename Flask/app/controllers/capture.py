@@ -44,7 +44,8 @@ class Capture(object):
 
     def capture(self):
         while(True):
-            print("Running")
+            print("Running1")
+            print("Running2")
             self.show_frame = self.gen.get_decoded_frame()
             self.gray_frame = cv2.cvtColor(self.show_frame, cv2.COLOR_BGR2GRAY)
 

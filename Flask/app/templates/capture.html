@@ -1,17 +1,15 @@
 {% include 'base/head.html' %}
 {% include 'base/header.html' %}
-
-    <hr> <br>
-    {% if bodyText%}
-       {{ bodyText }}
-    {% else %}
-      <h1>Capture of Faces</h1>
-    {% endif %}
+{% include 'base/nav_bar.html' %}
 
     <!--Put the streaming in the page*/-->
-
-    <div class="window_capture">
-      <img id="bg" src="{{ url_for('face_capture') }}">
+    <div>
+        <div>
+            <div class="window_capture">
+                <img id="b" src="{{ url_for('face_capture') }}">
+            </div>
+        </div>
     </div>
+
 
 {% include 'base/footer.html' %}

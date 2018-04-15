@@ -24,8 +24,6 @@ class VideoCamera(object):
          return jpeg.tostring()
 
 
-
-
         #frame = cv2.imdecode(jpeg, cv2.COLOR_BGR2GRAY)
 
     #def __init__(self):

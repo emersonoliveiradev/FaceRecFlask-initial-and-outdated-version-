@@ -3,8 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 
-
-
 #Create to interpreter of python, control the all aplication
 app = Flask(__name__)
 
