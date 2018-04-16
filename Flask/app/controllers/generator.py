@@ -11,6 +11,7 @@ class Generator(object):
             yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
             
     def get_decoded_frame(self):
+        print("ok")
         return self.video_camera.get_decoded_frame()
 
         

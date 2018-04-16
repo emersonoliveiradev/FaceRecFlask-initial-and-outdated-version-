@@ -23,6 +23,7 @@ class Capture(object):
         self.sample = 1
 
 
+
     def get_face_classifier(self):
         return self.face_classifier
 
@@ -42,7 +43,8 @@ class Capture(object):
             cv2.rectangle(self.show_frame, (ex, ey), (ex + ew, ey + eh), (255, 0, 0), 2)
         return frame
 
-    def capture(self):
+    #Só retirar o "2"
+    def capture2(self):
         while(True):
             print("Running1")
             print("Running2")
@@ -65,10 +67,28 @@ class Capture(object):
             return jpeg.tostring()
 
 
+    def capture(self):
+        while(True):
+            print("Running1")
+            print("Running2")
+            self.show_frame = self.gen.get_decoded_frame()
+            self.gray_frame = cv2.cvtColor(self.show_frame, cv2.COLOR_BGR2GRAY)
+
+            detected_faces = self.face_classifier.detectMultiScale(self.gray_frame, scaleFactor=1.5, minSize=(50, 50))
+
+            if type(detected_faces) != tuple:
+                gray_frame, face_resize = self.found_classifier_face(detected_faces, self.gray_frame)
+                ret, jpeg1 = cv2.imencode('.jpg', self.show_frame)
+                #ret, jpeg2 = cv2.imencode('.jpg', face_resize)
+                return jpeg1.tostring(), face_resize
+
+            return False, False
+
+'''
 if __name__ == '__main__':
     cap = Capture()
     cap.capture()
-
+'''
 #face = cap.get_eye_classifier()
 #cap = Capture()
 #cap.capture()

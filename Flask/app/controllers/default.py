@@ -3,6 +3,7 @@ from flask import Flask, render_template, Response
 #Discocery where is the root path of modules
 from app.controllers.camera import VideoCamera
 from app.controllers.capture import Capture
+from app.controllers.recognizer import Recognizer
 from app.controllers.generator import Generator
 
 from app.models.forms import LoginForm
@@ -25,13 +26,17 @@ def login():
 
 @app.route('/face_capture')
 def face_capture():
-    return Response(gen2(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen3(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
+#No meu template ele acaba chamando o "/face_capture"
 @app.route("/show_capture")
 def show_capture():
     return render_template('capture.html')
 
+
+@app.route('/face_recognition')
+def face_recognition():
+    return render_template('recognition.html')
 
 @app.route("/about")
 def about():
@@ -54,12 +59,23 @@ def gen(camera):
         frame = camera.get_encoded_frame()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
+
 #Posso ter dois 'yields aqui?????'
 #Video streaming generator function
+
 def gen2():
     cap = Capture()
     while True:
         frame = cap.capture()
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+def gen3():
+    rec = Recognizer()
+    while True:
+        frame = rec.rec_detectar()
+        if frame == False:
+            continue
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
@@ -74,4 +90,7 @@ def show_name(name):
 
 if __name__ == '__main__':
     app.run(debug=True)
+'''
 
+Busca a url indicada, dai ele vai
+'''

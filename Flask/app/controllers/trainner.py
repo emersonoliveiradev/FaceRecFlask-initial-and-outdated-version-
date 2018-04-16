@@ -2,14 +2,12 @@ import cv2
 import numpy as np
 import os
 
-
 class Trainner(object):
     def __init__(self):
-        self.eigenface_trainer = cv2.face.createEigenFaceRecognizer(50, 0)
-        self.fisherface_trainer = cv2.face.createFisherFaceRecognizer()
-        self.lbph_trainer = cv2.face.createLBPHFaceRecognizer()
+        self.eigenface = cv2.face.createEigenFaceRecognizer(50, 0)
+        self.fisherface = cv2.face.createFisherFaceRecognizer()
+        self.lbph = cv2.face.createLBPHFaceRecognizer()
 
-    @classmethod
     def get_face_id(self):
         #List the files in the database_faces and add the directory
         path = [os.path.join('database_faces', f) for f in os.listdir('database_faces')]
@@ -23,12 +21,19 @@ class Trainner(object):
             faces.append(user_face)
         return np.array(ids), faces
 
-    def eigenface_trainer(self):
-        ids, faces = get_face_id()
-        self.eigenface_trainer.train(faces, ids)
-        self.eigenface_trainer.save("classifiers/classify_eigen_yale.yml")
+    def eigenface_trainer(self, faces, ids):
+        self.eigenface.train(faces, ids)
+        self.eigenface.save("classifiers/classify_eigen_yale.yml")
         return True
 
+    #Para o recognizer
+    def get_eiggen(self):
+        return self.eigenface
 
-if __name__ == '__main__()':
-    trinador = Trainner()
+if __name__ == '__main__':
+    treinador = Trainner()
+    print("Initializing...")
+    ids, faces = treinador.get_face_id()
+    print("Trainning...")
+    treinador.eigenface_trainer(faces, ids)
+    print("Finish!")
