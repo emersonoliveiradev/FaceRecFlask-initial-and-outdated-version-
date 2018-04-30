@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from copy import copy
 #A diferença está aqui... mas oq???? Por que com o caminho completo não funciona???
-from classifier import Classifier
+from app.controllers.classifier import Classifier
 from app.controllers.generator import Generator
 
 
