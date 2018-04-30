@@ -65,6 +65,7 @@ class Capture(object):
                 return detected_faces, self.show_frame, self.gray_frame
             else:
                 print("Não existe faces detectadas")
+                return None, self.show_frame, None
 
 
 
