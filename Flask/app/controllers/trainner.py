@@ -4,7 +4,7 @@ import os
 
 class Trainner(object):
     def __init__(self):
-        self.eigenface = cv2.face.createEigenFaceRecognizer(50, 0)
+        self.eigenface = cv2.face.createEigenFaceRecognizer() #Não colocar os números aqui dentro
         self.fisherface = cv2.face.createFisherFaceRecognizer()
         self.lbph = cv2.face.createLBPHFaceRecognizer()
 
