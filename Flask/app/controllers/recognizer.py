@@ -25,7 +25,7 @@ class Recognizer(object):
         cont = 0
         for x, y, w, h in detected_face:
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 5)
-            cv2.putText(frame, str(id[cont]), (x, y + (h + 30)), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2, (0, 0, 255))
+            cv2.putText(frame, "U - " + str(id[cont][0]) + " | C " + str(int(id[cont][1])), (x, y + (h + 30)), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 0, 255))
             cont +=1
 
     def rec_detectar(self):
@@ -42,6 +42,3 @@ class Recognizer(object):
         self.draw_and_put_face(detected_faces, show_frame, id)
         ret, jpeg1 = cv2.imencode('.jpg', show_frame)
         return jpeg1.tostring()
-
-        print("Não reconheceu")
-

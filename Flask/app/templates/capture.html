@@ -9,7 +9,18 @@
                 <img id="b" src="{{ url_for('face_capture') }}">
             </div>
         </div>
+        <div style="float: left" >
+            <p>As fotos só serão salvas caso haja uma face sendo detectada
+            <div><button id="snap" onclick="capturarFoto()">Tirar Foto</button></div>
+            <div><button id="save">Salvar Foto</button></div>
+        </div>
+        <script>
+            function capturarFoto() {
+                alert("Hello! I am an alert box!!");
+            }
+        </script>
     </div>
+
 
 
 {% include 'base/footer.html' %}

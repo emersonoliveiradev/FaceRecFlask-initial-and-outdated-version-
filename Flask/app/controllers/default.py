@@ -29,6 +29,7 @@ def show_capture():
 def face_capture():
     return Response(gen_capture(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+#Tentar mandar uma chave aqui pela url, liberando p capturar a imagem
 def gen_capture():
     cap = Capture()
     while True:

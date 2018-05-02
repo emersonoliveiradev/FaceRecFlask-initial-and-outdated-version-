@@ -43,11 +43,14 @@ class Capture(object):
             self.show_frame = self.gen.get_decoded_frame()
             self.gray_frame = cv2.cvtColor(self.show_frame, cv2.COLOR_BGR2GRAY)
             detected_faces = self.face_classifier.detectMultiScale(self.gray_frame, scaleFactor=1.5, minSize=(50, 50))
-            if type(detected_faces) != tuple:                
+            print("OK1")
+            if type(detected_faces) == np.ndarray:
                 self.draw_face(detected_faces)
                 detected_eyes = self.eye_classifier.detectMultiScale(self.gray_frame, minSize=(20, 20))
                 self.draw_eye(detected_eyes)
+                print("OK2")
                 if cv2.waitKey(1) & 0xFF == ord("c"):
+                    print("OK3")
                     cv2.imwrite("database_faces/user." + str(self.id) + "." + str(self.sample) + ".jpg", face_resize)
                     print("Face" + str(self.sample) + " captured")
                     self.sample += 1
@@ -61,7 +64,7 @@ class Capture(object):
             self.gray_frame = cv2.cvtColor(self.show_frame, cv2.COLOR_BGR2GRAY)
             detected_faces = self.face_classifier.detectMultiScale(self.gray_frame, scaleFactor=1.5, minSize=(50, 50))
             if type(detected_faces) == np.ndarray:
-                print("Retornando!!!!!!!!!!!!!!!!!!!")
+                print("Retornando!!!!!!!!!!!!!!!!!")
                 return detected_faces, self.show_frame, self.gray_frame
             else:
                 print("Não existe faces detectadas")
