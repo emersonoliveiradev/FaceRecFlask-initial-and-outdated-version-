@@ -2,7 +2,7 @@ import cv2
 
 class VideoCamera(object):
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(-1)
 
     def __del__(self):
         self.cap.release()
