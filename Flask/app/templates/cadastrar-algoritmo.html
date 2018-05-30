@@ -1,0 +1,18 @@
+{% include 'base/head.html' %}
+
+
+
+<div>
+      <br><br><br>
+      <form action="/crud-algoritmo" method="POST">
+          <label>Nome</label>
+              {{ form.nome(class="form-control") }}
+          <br><br>
+          <label>Algoritmo</label>
+              {{ form.conteudo(class="form-control") }}
+          <input type="submit" value="Verificar">
+      </form>
+</div>
+
+
+{% include 'base/footer.html' %}

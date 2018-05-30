@@ -1,11 +1,11 @@
 from app import app
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 #Discocery where is the root path of modules
 from app.controllers.camera import VideoCamera
 from app.controllers.capture import Capture
 from app.controllers.recognizer import Recognizer
 from app.controllers.generator import Generator
-from app.models.forms import LoginForm
+from app.models.forms import LoginForm, CadastrarAlgoritmoForm
 
 
 @app.route('/home')
@@ -85,6 +85,62 @@ def help():
 @app.route('/test/<name>')
 def show_name(name):
     return render_template('test.html', name=name)
+
+
+#######################
+#Algoritmos do Usuário#
+#######################
+
+@app.route('/crud-algoritmo', methods=['GET', 'POST'])
+def cadastrar_algoritmo():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        algoritmo = request.form['conteudo']
+        data = [nome, algoritmo]
+        arq = open("/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos_usuario_id.py", "r+")
+        print(arq)
+        for l in arq:
+            l = l.rstrip()
+            print(l)
+
+        arq.write(algoritmo)
+        arq.write('\n\n\n')
+        arq.close()
+
+        from app.controllers.algoritmos_usuario_id import Operacoes
+        o = Operacoes()
+        a = o.sum(int(2), int(6))
+        print(a)
+        print('OK')
+        form = CadastrarAlgoritmoForm()
+        return listar_algoritmos()
+
+    form = CadastrarAlgoritmoForm()
+    return render_template('cadastrar-algoritmo.html', form=form)
+
+
+#Nomes das funções criadas
+@app.route('/listar-algoritmos', methods=['GET'])
+def listar_algoritmos():
+    nome = "algoritmos_usuario_id.py"
+
+    arq = open("/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos_usuario_id.py", "r+")
+    count=0
+    lista = []
+    for l in arq:
+        if "class" in l:
+            a = l.index(' ')
+            b = l.index(":")
+            nome_funcao = l[a:b]
+            lista.append(nome_funcao)
+
+            count+=1
+    if count==0:
+        print("Nenhuma classe encontrada!")
+
+    arq.close()
+    data = [nome, lista]
+    return render_template('listar-algoritmos.html', data=data)
 
 
 

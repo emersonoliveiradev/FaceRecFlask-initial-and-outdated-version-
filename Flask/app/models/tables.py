@@ -1,4 +1,4 @@
-from app import dbm
+from app import db
 
 #Create class for table
 class User(db.Model):
@@ -10,7 +10,6 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=False)
     password = db.Column(db.String(50))
     email = db.Column(db.String(50), unique=True)
-
 
     #Set required / initialize an user
     def __init__(self, name, username, password, email):
@@ -28,10 +27,10 @@ class Faces(db.Model):
     __tablename__ = "faces"
     id = db.Column(db.Integer, primary_key=True)
     face_image = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.Foreignkey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     #Create relashionship between FACE and USER
-    user = db.relashionship('User', foreign_keys=user_id)
+    #user = db.relashionship('User', foreign_keys=user_id)
 
     def __init__(self, face_image, user_id):
         self.face_image = face_image

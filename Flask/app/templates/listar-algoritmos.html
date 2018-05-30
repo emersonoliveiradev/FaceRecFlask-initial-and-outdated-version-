@@ -1,0 +1,46 @@
+{% include 'base/head.html' %}
+
+<div class="table-responsive">
+    <form action="/grade">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Usuário</th>
+                <th>Descrição</th>
+                <th>Algoritmo</th>
+                <th>Data de Criação</th>
+                <th>Excluir</th>
+                <th>Editar</th>
+
+            </tr>
+                {% for c in data[1] %}
+                <tr>
+                    <td>
+                        000
+                    </td>
+                    <td>
+                        {{ data[0] }}
+                    </td>
+                    <td>
+                        Blá Blá
+                    </td>
+                    <td>
+                        {{ c }}
+                    </td>
+                    <td>
+                        Data Aqui
+                    </td>
+                    <td>
+                        Apagar?
+                    </td>
+                    <td>
+                        Editar?
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
+</div>
+
+
+{% include 'base/footer.html' %}
