@@ -1,5 +1,5 @@
 from app import app, login_manager, login_user, logout_user, login_required
-from flask import Flask, render_template, Response, request, redirect, url_for
+from flask import Flask, render_template, Response, request, redirect, url_for, flash
 
 
 
@@ -151,17 +151,30 @@ def load_user(id):
     return Usuario.query.filter_by(id=id).first()
 
 
-@app.route("/login")
-def login():
-    form = LoginForm()
-    return render_template('login.html', form=form)
-
-
 ##########
 #Usuarios#
 ##########
+@app.route("/login", methods=['GET','POST'])
+def login():
+    form_login = LoginForm()
+    print("Entrou")
+    # Login-Manager
+    if form_login.validate_on_submit():
+        print("Entrou")
+        usuario = Usuario.query.filter_by(email=form_login.email.data).first()
+        if usuario and usuario.senha == form_login.senha.data:
+            print("Entrou")
+            login_user(usuario, force=True, remember=True)
+            flash("Logado!")
+            return redirect(url_for("index"))
+        else:
+            flash("Login Inválido!")
+            return redirect(url_for("login"))
+    return render_template('login.html', form_login=form_login)
+
+
 @app.route("/usuarios")
-def logar():
+def logando():
     usuario = Usuario.query.filter_by(senha='123').first()
     #Adiciona todos os dados do bd da pesssoa
     login_user(usuario)

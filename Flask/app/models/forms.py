@@ -4,9 +4,9 @@ from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired
 
 class LoginForm(FlaskForm):
-    username = StringField("username", validators=[DataRequired()])
-    password = PasswordField("password", validators=[DataRequired()])
-    remember_me = BooleanField("remember_me")
+    email = StringField("email", validators=[DataRequired()])
+    senha = PasswordField("senha", validators=[DataRequired()])
+
 
 class CadastrarAlgoritmoForm(FlaskForm):
     nome = StringField("nome", validators=[DataRequired()])
