@@ -11,7 +11,7 @@ from app.controllers.generator import Generator
 
 #Forms e Tables
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm
-from app.models.tables import Pessoa
+from app.models.tables import Pessoa, Usuario
 
 
 @app.route('/home')
@@ -148,7 +148,7 @@ def listar_algoritmos():
 #######
 @login_manager.user_loader
 def load_user(id):
-    return Pessoa.query.filter_by(id=id).first()
+    return Usuario.query.filter_by(id=id).first()
 
 
 @app.route("/login")
@@ -162,9 +162,9 @@ def login():
 ##########
 @app.route("/usuarios")
 def logar():
-    pessoa = Pessoa.query.filter_by(nome='Emerson').first()
+    usuario = Usuario.query.filter_by(senha='123').first()
     #Adiciona todos os dados do bd da pesssoa
-    login_user(pessoa)
+    login_user(usuario)
     return "Está logado"
 
 @app.route("/logout")
