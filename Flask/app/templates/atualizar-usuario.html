@@ -1,0 +1,23 @@
+{% include 'base/head.html' %}
+{% include 'base/nav_bar.html' %}
+
+
+<div>
+      <br><br><br>
+      <form action="/atualizar-usuario/{{ usuario.id }}" method="POST">
+          <label>Nome</label>
+              {{ form.nome(class="form-control", value=usuario.nome) }}
+          <label>E-mail</label>
+              {{ form.email(class="form-control", value=usuario.email) }}
+          <label>Senha</label>
+              {{ form.nome(class="form-control", value=usuario.senha) }}
+          <label>CPF</label>
+              {{ form.cpf(class="form-control", value=usuario.cpf) }}
+          <label>Data de Nascimento</label>
+              {{ form.dt_nascimento(class="form-control", value=usuario.dt_nascimento) }}
+          <input type="submit" value="Enviar">
+      </form>
+</div>
+
+
+{% include 'base/footer.html' %}

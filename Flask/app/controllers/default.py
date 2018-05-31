@@ -1,4 +1,4 @@
-from app import app, db, login_manager, login_user, logout_user, login_required
+from app import app, db, login_manager, login_user, logout_user, login_required, current_user
 from flask import Flask, render_template, Response, request, redirect, url_for, flash
 
 #Discocery where is the root path of modules
@@ -9,7 +9,7 @@ from app.controllers.generator import Generator
 
 #Forms e Tables
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm
-from app.models.tables import Pessoa, Usuario
+from app.models.tables import Algoritmo, Pessoa, Usuario
 
 
 @app.route('/home')
@@ -123,8 +123,6 @@ def atualizar_algoritmo(id):
     form = CadastrarAlgoritmoForm()
     return render_template('cadastrar-algoritmo.html', form=form)
 
-
-
 #Nomes das funções criadas
 @app.route('/listar-algoritmos', methods=['GET'])
 def listar_algoritmos():
@@ -148,8 +146,42 @@ def listar_algoritmos():
     data = [nome, lista]
     return render_template('listar-algoritmos.html', data=data)
 
+####
+#BD#
+####
+@app.route('/cadastrar-algoritmo2', methods=['GET', 'POST'])
+def cadastrar_algoritmo2():
+    flash(current_user.get_id())
+    if request.method == 'POST':
+        nome = request.form['nome']
+        algoritmo = request.form['algoritmo']
+        usuario = request.form['usuario']
+
+        if nome and algoritmo and usuario:
+            algoritmo = Algoritmo(nome, algoritmo, usuario)
+            db.session.add(algoritmo)
+            db.session.commit()
+            flash("Cadastro de algoritmo realizado com sucesso!")
+            flash(current_user.get_id())
+            algoritmo = Algoritmo.query.filter_by(id=current_user.get_id()).all()
+            print(len(algoritmo))
+            return render_template('listar-algoritmos2.html', algoritmo=algoritmo)
+
+    form = CadastrarAlgoritmoForm()
+    return render_template('cadastrar-algoritmo2.html', form=form)
 
 
+
+#Nomes das funções criadas
+@app.route('/listar-algoritmos2', methods=['GET'])
+def listar_algoritmos2():
+    algoritmo = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+    return render_template('listar-algoritmos2.html', algoritmo=algoritmo)
+
+#
+#print(current_user.id)
+#print(current_user.nome)
+#print(current_user.cpf)
 
 
 #######
@@ -166,22 +198,22 @@ def load_user(id):
 @app.route("/login", methods=['GET','POST'])
 def login():
     form_login = LoginForm()
-    print("Entrou")
+
     # Login-Manager
-    if form_login.validate_on_submit():
-        print("Entrou")
-        usuario = Usuario.query.filter_by(email=form_login.email.data).first()
-        if usuario and usuario.senha == form_login.senha.data:
-            print("Entrou")
-            login_user(usuario, force=True, remember=True)
-            flash("Logado!")
-            return redirect(url_for("index"))
-        else:
-            flash("Login Inválido!")
-            return redirect(url_for("login"))
+    if request.method == "POST":
+        if form_login.validate_on_submit():
+            usuario = Usuario.query.filter_by(email=form_login.email.data).first()
+            flash(usuario.senha)
+            if usuario and usuario.senha == form_login.senha.data:
+                login_user(usuario, force=True, remember=True)
+                flash("Logado!")
+                return redirect(url_for("index"))
+            else:
+                flash("Login Inválido!")
+                return redirect(url_for("login"))
     return render_template('login.html', form_login=form_login)
 
-
+#não tô usando
 @app.route("/usuarios")
 def logando():
     usuario = Usuario.query.filter_by(senha='123').first()
@@ -238,6 +270,29 @@ def excluir_usuario(id):
     db.session.commit()
     data = Usuario.query.all()
     return render_template('listar-usuarios.html', data=data)
+
+@app.route('/atualizar-usuario/<int:id>', methods=['GET', 'POST'])
+@app.route('/atualizar-usuario', methods=['POST'])
+def atualizar_usuario(id=None):
+    if id!=None and request.method=="GET":
+        usuario = Usuario.query.filter_by(id=id).first()
+        usuario = Usuario.query.filter_by(id=id).first()
+        form = CadastrarUsuarioForm()
+        return render_template('atualizar-usuario.html', form=form, usuario=usuario)
+    elif request.method=="POST":
+        nome = request.form['nome']
+        email = request.form['email']
+        cpf = request.form['cpf']
+        dt_nascimento = request.form['dt_nascimento']
+        if nome or email or cpf or dt_nascimento:
+            usuario = Usuario.query.filter_by(id=id).first()
+            usuario.nome = nome
+            usuario.email = email
+            usuario.cpf = cpf
+            usuario.dt_nacimento = dt_nascimento
+            db.session.commit()
+        data = Usuario.query.all()
+        return render_template('listar-usuarios.html', data=data)
 
 
 if __name__ == '__main__':

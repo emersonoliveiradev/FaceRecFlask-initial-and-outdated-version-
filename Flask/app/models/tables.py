@@ -13,6 +13,7 @@ class Pessoa(db.Model):
     def __repr__(self):
         return '<Pessoa {}>'.format(self.nome)
 
+
 #Só retirar o Pessoa pra desaparecer a mensagem
 class Usuario(Pessoa, db.Model):
     __tablename__ = "usuarios"
@@ -53,3 +54,19 @@ class Usuario(Pessoa, db.Model):
     def __repr__(self):
         return '<Usuario {}>'.format(self.cpf)
 
+
+class Algoritmo(db.Model):
+    __tablename__= "algoritmos"
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(20))
+    algoritmo = db.Column(db.Text)
+    usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
+
+    def __init__(self, nome, algoritmo, usuario):
+        self.nome = nome
+        self.algoritmo = algoritmo
+        self.usuario = usuario
+
+    def __repr__(self):
+        return '<Algoritmo {}>'.format(self.nome)

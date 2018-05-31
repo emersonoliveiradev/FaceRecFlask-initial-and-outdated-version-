@@ -32,10 +32,10 @@
                     </td>
                     <td>
                         <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
-                        <a href="{{ url_for('excluir_usuario', id=u.id)}}">Apagar?</a>
+                        <a href="{{ url_for('atualizar_usuario', id=u.id)}}">Atualizar?</a>
                     </td>
                     <td>
-                        Editar?
+                        <a href="{{ url_for('excluir_usuario', id=u.id)}}">Excluir?</a>
                     </td>
                 </tr>
             {% endfor %}

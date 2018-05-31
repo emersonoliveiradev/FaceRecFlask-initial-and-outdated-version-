@@ -4,12 +4,14 @@
 
 <div>
       <br><br><br>
-      <form action="/crud-algoritmo" method="POST">
+      <form action="/cadastrar-algoritmo2" method="POST">
           <label>Nome</label>
               {{ form.nome(class="form-control") }}
           <br><br>
           <label>Algoritmo</label>
               {{ form.algoritmo(class="form-control") }}
+          <label>Usuário</label>
+              {{ form.usuario(class="form-control") }}
           <input type="submit" value="Verificar">
       </form>
 </div>

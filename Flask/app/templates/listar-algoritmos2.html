@@ -1,0 +1,44 @@
+{% include 'base/head.html' %}
+{% include 'base/nav_bar.html' %}
+
+<div class="table-responsive">
+    <form action="/grade">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Usuário</th>
+                <th>Descrição</th>
+                <th>Algoritmo</th>
+                <th>Excluir</th>
+                <th>Editar</th>
+
+            </tr>
+            {% for a in algoritmo %}
+            <tr>
+                <td>
+                    {{ a.id }}
+                </td>
+                <td>
+                    {{ a.nome }}
+                </td>
+                <td>
+
+                </td>
+                <td>
+                    <pre>{{ a.algoritmo }}</pre>
+                </td>
+                <td>
+                    <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
+                    <a href="{{ url_for('cadastrar_algoritmo') }}">Apagar?</a>
+                </td>
+                <td>
+                    Editar?
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </form>
+</div>
+
+
+{% include 'base/footer.html' %}
