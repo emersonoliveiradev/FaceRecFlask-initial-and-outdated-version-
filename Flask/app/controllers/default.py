@@ -1,7 +1,5 @@
-from app import app, login_manager, login_user, logout_user, login_required
+from app import app, db, login_manager, login_user, logout_user, login_required
 from flask import Flask, render_template, Response, request, redirect, url_for, flash
-
-
 
 #Discocery where is the root path of modules
 from app.controllers.camera import VideoCamera
@@ -10,7 +8,7 @@ from app.controllers.recognizer import Recognizer
 from app.controllers.generator import Generator
 
 #Forms e Tables
-from app.models.forms import LoginForm, CadastrarAlgoritmoForm
+from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm
 from app.models.tables import Pessoa, Usuario
 
 
@@ -90,7 +88,6 @@ def show_name(name):
 #######################
 #Algoritmos do Usuário#
 #######################
-
 @app.route('/crud-algoritmo', methods=['GET', 'POST'])
 def cadastrar_algoritmo():
     if request.method == 'POST':
@@ -119,6 +116,15 @@ def cadastrar_algoritmo():
     return render_template('cadastrar-algoritmo.html', form=form)
 
 
+@app.route('/atualizar-algoritmo/<int:id>', methods=['GET'])
+def atualizar_algoritmo(id):
+    if id:
+        print("Existe")
+    form = CadastrarAlgoritmoForm()
+    return render_template('cadastrar-algoritmo.html', form=form)
+
+
+
 #Nomes das funções criadas
 @app.route('/listar-algoritmos', methods=['GET'])
 def listar_algoritmos():
@@ -141,6 +147,9 @@ def listar_algoritmos():
     arq.close()
     data = [nome, lista]
     return render_template('listar-algoritmos.html', data=data)
+
+
+
 
 
 #######
@@ -190,6 +199,45 @@ def logout():
 @login_required
 def atual():
     return "Atual: " + current_user.nome
+
+
+@app.route("/cadastrar-usuario", methods=['GET','POST'])
+def cadastrar_usuario():
+    if request.method == 'POST':
+        print("Entrou")
+        nome = request.form['nome']
+        email = request.form['email']
+        senha= request.form['senha']
+        cpf = request.form['cpf']
+        dt_nascimento = request.form['dt_nascimento']
+
+        if nome and email and senha and cpf and dt_nascimento:
+            usuario = Usuario(nome, email, senha, cpf, dt_nascimento)
+            db.session.add(usuario)
+            db.session.commit()
+            flash("Cadastro de usuário realizado com sucesso!")
+        else:
+            print("Falta valores")
+
+
+        form = CadastrarUsuarioForm()
+        return render_template('listar-usuarios.html', form=form)
+
+    form = CadastrarUsuarioForm()
+    return render_template('cadastrar-usuario.html', form=form)
+
+@app.route('/listar-usuarios', methods=['GET', 'POST'])
+def listar_usuarios():
+    data = Usuario.query.all()
+    return render_template('listar-usuarios.html', data=data)
+
+@app.route('/excluir-usuario/<int:id>', methods=['GET', 'POST'])
+def excluir_usuario(id):
+    usuario = Usuario.query.filter_by(id=id).first()
+    db.session.delete(usuario)
+    db.session.commit()
+    data = Usuario.query.all()
+    return render_template('listar-usuarios.html', data=data)
 
 
 if __name__ == '__main__':

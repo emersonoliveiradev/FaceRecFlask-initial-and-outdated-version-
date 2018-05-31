@@ -2,7 +2,6 @@
 {% include 'base/nav_bar.html' %}
 
 <div class="table-responsive">
-    <form action="/grade">
         <table class="table">
             <tr>
                 <th>Id</th>
@@ -14,34 +13,34 @@
                 <th>Editar</th>
 
             </tr>
-                {% for c in data[1] %}
+            {% for u in data %}
                 <tr>
                     <td>
-                        000
+                        {{ u.id}}
                     </td>
                     <td>
-                        {{ data[0] }}
+                        {{ u.nome}}
                     </td>
                     <td>
-                        Blá Blá
+                        {{ u.email}}
                     </td>
                     <td>
-                        {{ c }}
+                        {{ u.cpf}}
                     </td>
                     <td>
-                        Data Aqui
+                        {{ u.dt_nascimento}}
                     </td>
                     <td>
                         <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
-                        <a href="{{ url_for('cadastrar_algoritmo') }}">Apagar?</a>
+                        <a href="{{ url_for('excluir_usuario', id=u.id)}}">Apagar?</a>
                     </td>
                     <td>
                         Editar?
                     </td>
                 </tr>
             {% endfor %}
+
         </table>
-    </form>
 </div>
 
 

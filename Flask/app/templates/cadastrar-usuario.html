@@ -1,0 +1,24 @@
+{% include 'base/head.html' %}
+{% include 'base/nav_bar.html' %}
+
+
+<div>
+      <br><br><br>
+      <form action="/cadastrar-usuario" method="POST">
+          <label>Nome</label>
+              {{ form.nome(class="form-control") }}
+          <label>E-mail</label>
+              {{ form.email(class="form-control") }}
+          <label>Senha</label>
+              {{ form.senha(class="form-control") }}
+          <label>CPF</label>
+              {{ form.cpf(class="form-control") }}
+          <label>Data de Nascimento</label>
+              {{ form.dt_nascimento(class="form-control") }}
+
+          <input type="submit" value="Verificar">
+      </form>
+</div>
+
+
+{% include 'base/footer.html' %}
