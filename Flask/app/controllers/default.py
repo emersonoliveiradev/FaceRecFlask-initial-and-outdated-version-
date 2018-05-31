@@ -1,11 +1,17 @@
-from app import app
-from flask import Flask, render_template, Response, request
+from app import app, login_manager, login_user, logout_user, login_required
+from flask import Flask, render_template, Response, request, redirect, url_for
+
+
+
 #Discocery where is the root path of modules
 from app.controllers.camera import VideoCamera
 from app.controllers.capture import Capture
 from app.controllers.recognizer import Recognizer
 from app.controllers.generator import Generator
+
+#Forms e Tables
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm
+from app.models.tables import Pessoa
 
 
 @app.route('/home')
@@ -13,12 +19,6 @@ from app.models.forms import LoginForm, CadastrarAlgoritmoForm
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route("/login")
-def login():
-    form = LoginForm()
-    return render_template('login.html', form=form)
-
 
 
 @app.route("/show_capture")
@@ -142,6 +142,41 @@ def listar_algoritmos():
     data = [nome, lista]
     return render_template('listar-algoritmos.html', data=data)
 
+
+#######
+#Login#
+#######
+@login_manager.user_loader
+def load_user(id):
+    return Pessoa.query.filter_by(id=id).first()
+
+
+@app.route("/login")
+def login():
+    form = LoginForm()
+    return render_template('login.html', form=form)
+
+
+##########
+#Usuarios#
+##########
+@app.route("/usuarios")
+def logar():
+    pessoa = Pessoa.query.filter_by(nome='Emerson').first()
+    #Adiciona todos os dados do bd da pesssoa
+    login_user(pessoa)
+    return "Está logado"
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+@app.route("/atual")
+@login_required
+def atual():
+    return "Atual: " + current_user.nome
 
 
 if __name__ == '__main__':

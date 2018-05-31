@@ -1,40 +1,52 @@
+# -*- coding: utf-8 -*-
 from app import db
 
-#Create class for table
-class User(db.Model):
-    #Create table
-    __tablename__ = "users"
+class Pessoa(db.Model):
+    __tablename__ = "pessoas"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    username = db.Column(db.String(50), unique=False)
-    password = db.Column(db.String(50))
-    email = db.Column(db.String(50), unique=True)
+    nome = db.Column(db.String(50))
+    email = db.Column(db.String(50))
 
-    #Set required / initialize an user
-    def __init__(self, name, username, password, email):
-        self.name = name
-        self.username = username
-        self.password = password
-        self. email = email
+    def __init__(self, nome, email):
+        self.nome = nome
+        self.email = email
 
-    #Return informations about User
+    # Métodos para gerenciamento do Flask-login
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
+
     def __repr__(self):
-        return "<User %r>" % self.username
+        return '<Pessoa {}>'.format(self.nome)
 
 
-class Faces(db.Model):
-    __tablename__ = "faces"
+
+class Usuario(db.Model):
+    __tablename__ = "usuarios"
+
     id = db.Column(db.Integer, primary_key=True)
-    face_image = db.Column(db.Text)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    cpf = db.Column(db.String(20))
+    dt_nascimento = db.Column(db.String(20))
+    pessoa = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=True)
 
-    #Create relashionship between FACE and USER
-    #user = db.relashionship('User', foreign_keys=user_id)
+    def __init__(self, nome, email, cpf, dt_nascimento):
+        super(PessoaFisica, self).__init__(nome, email)
+        self.cpf = cpf
+        self.dt_nascimento = dt_nascimento
+        self.pessoa = super().id
 
-    def __init__(self, face_image, user_id):
-        self.face_image = face_image
-        self.user_id = user_id
 
-    def __repr__(self):
-        return "<Post %r>" % self.id
+
+
