@@ -88,8 +88,8 @@ def show_name(name):
 #######################
 #Algoritmos do Usuário#
 #######################
-@app.route('/crud-algoritmo', methods=['GET', 'POST'])
-def cadastrar_algoritmo():
+@app.route('/crud-algoritmo-velho', methods=['GET', 'POST'])
+def cadastrar_algoritmo_velho():
     if request.method == 'POST':
         nome = request.form['nome']
         algoritmo = request.form['conteudo']
@@ -116,16 +116,16 @@ def cadastrar_algoritmo():
     return render_template('cadastrar-algoritmo.html', form=form)
 
 
-@app.route('/atualizar-algoritmo/<int:id>', methods=['GET'])
-def atualizar_algoritmo(id):
+@app.route('/atualizar-algoritmo-velho/<int:id>', methods=['GET'])
+def atualizar_algoritmo_velho(id):
     if id:
         print("Existe")
     form = CadastrarAlgoritmoForm()
     return render_template('cadastrar-algoritmo.html', form=form)
 
 #Nomes das funções criadas
-@app.route('/listar-algoritmos', methods=['GET'])
-def listar_algoritmos():
+@app.route('/listar-algoritmos-velho', methods=['GET'])
+def listar_algoritmos_velho():
     nome = "algoritmos_usuario_id.py"
 
     arq = open("/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos_usuario_id.py", "r+")
@@ -146,12 +146,14 @@ def listar_algoritmos():
     data = [nome, lista]
     return render_template('listar-algoritmos.html', data=data)
 
-####
+
+
+
+#########################################################
 #BD#
 ####
-@app.route('/cadastrar-algoritmo2', methods=['GET', 'POST'])
-def cadastrar_algoritmo2():
-    flash(current_user.get_id())
+@app.route('/cadastrar-algoritmos', methods=['GET', 'POST'])
+def cadastrar_algoritmos():
     if request.method == 'POST':
         nome = request.form['nome']
         algoritmo = request.form['algoritmo']
@@ -171,12 +173,48 @@ def cadastrar_algoritmo2():
     return render_template('cadastrar-algoritmo2.html', form=form)
 
 
-
 #Nomes das funções criadas
-@app.route('/listar-algoritmos2', methods=['GET'])
-def listar_algoritmos2():
-    algoritmo = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
-    return render_template('listar-algoritmos2.html', algoritmo=algoritmo)
+@app.route('/listar-algoritmos', methods=['GET'])
+def listar_algoritmos():
+    algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+    return render_template('algoritmo/listar-algoritmos.html', algoritmos=algoritmos)
+
+
+@app.route('/excluir-algoritmo/<int:id>', methods=['GET', 'POST'])
+def excluir_algoritmo(id):
+    algoritmo = Algoritmo.query.filter_by(id=id).first()
+    if algoritmo:
+        db.session.delete(algoritmo)
+        db.session.commit()
+        flash("Exclusão realizada com sucesso!")
+        algoritmos = Usuario.query.all()
+        return redirect(url_for('listar_algoritmos', algoritmos=algoritmos))
+    else:
+        flash("Exclusão não conluída!")
+        algoritmos = Algoritmo.query.all()
+        return redirect(url_for('listar_algoritmos', algoritmos=algoritmos))
+
+
+@app.route('/atualizar-algoritmo/<int:id>', methods=['GET', 'POST'])
+@app.route('/atualizar-algoritmo', methods=['POST'])
+def atualizar_algoritmo(id=None):
+    if id!=None and request.method=="GET":
+        algoritmo = Algoritmo.query.filter_by(id=id).first()
+        form = CadastrarAlgoritmoForm()
+        return render_template('algoritmo/atualizar-algoritmo.html', form=form, algoritmo=algoritmo)
+    elif request.method=="POST":
+        nome = request.form['nome']
+        algoritmo = request.form['algoritmo']
+        usuario = request.form['usuario']
+        if nome or algoritmo or usuario:
+            algoritmo = Algoritmo.query.filter_by(id=id).first()
+            algoritmo.nome = nome
+            algoritmo.email = email
+            algoritmo.cpf = cpf
+            algoritmo.dt_nacimento = dt_nascimento
+            db.session.commit()
+        usuarios = Usuario.query.all()
+        return redirect(url_for('listar_algoritmos', usuarios=usuarios))
 
 #
 #print(current_user.id)
@@ -233,8 +271,8 @@ def atual():
     return "Atual: " + current_user.nome
 
 
-@app.route("/cadastrar-usuario", methods=['GET','POST'])
-def cadastrar_usuario():
+@app.route("/cadastrar-usuarios", methods=['GET','POST'])
+def cadastrar_usuarios():
     if request.method == 'POST':
         print("Entrou")
         nome = request.form['nome']
@@ -247,38 +285,46 @@ def cadastrar_usuario():
             usuario = Usuario(nome, email, senha, cpf, dt_nascimento)
             db.session.add(usuario)
             db.session.commit()
-            flash("Cadastro de usuário realizado com sucesso!")
+            flash("Cadastro realizado com sucesso!")
+            usuarios = Usuario.query.all()
+            return redirect(url_for('listar_usuarios', usuarios=usuarios))
         else:
-            print("Falta valores")
-
-
-        form = CadastrarUsuarioForm()
-        return render_template('listar-usuarios.html', form=form)
+            flash("Todos os valores são necessarios ao cadastro!")
+            usuarios = Usuario.query.all()
+            return redirect(url_for('cadastrar_usuarios', usuarios=usuarios))
 
     form = CadastrarUsuarioForm()
-    return render_template('cadastrar-usuario.html', form=form)
+    return render_template('usuario/cadastrar-usuarios.html', form=form)
+
 
 @app.route('/listar-usuarios', methods=['GET', 'POST'])
 def listar_usuarios():
-    data = Usuario.query.all()
-    return render_template('listar-usuarios.html', data=data)
+    usuarios = Usuario.query.all()
+    return render_template('usuario/listar-usuarios.html', usuarios=usuarios)
+
 
 @app.route('/excluir-usuario/<int:id>', methods=['GET', 'POST'])
 def excluir_usuario(id):
     usuario = Usuario.query.filter_by(id=id).first()
-    db.session.delete(usuario)
-    db.session.commit()
-    data = Usuario.query.all()
-    return render_template('listar-usuarios.html', data=data)
+    if usuario:
+        db.session.delete(usuario)
+        db.session.commit()
+        flash("Exclusão realizada com sucesso!")
+        usuarios = Usuario.query.all()
+        return redirect(url_for('listar_usuarios', usuarios=usuarios))
+    else:
+        flash("Exclusão não conluída!")
+        usuarios = Usuario.query.all()
+        return redirect(url_for('listar_usuarios', usuarios=usuarios))
+
 
 @app.route('/atualizar-usuario/<int:id>', methods=['GET', 'POST'])
 @app.route('/atualizar-usuario', methods=['POST'])
 def atualizar_usuario(id=None):
     if id!=None and request.method=="GET":
         usuario = Usuario.query.filter_by(id=id).first()
-        usuario = Usuario.query.filter_by(id=id).first()
         form = CadastrarUsuarioForm()
-        return render_template('atualizar-usuario.html', form=form, usuario=usuario)
+        return render_template('usuario/atualizar-usuario.html', form=form, usuario=usuario)
     elif request.method=="POST":
         nome = request.form['nome']
         email = request.form['email']
@@ -291,8 +337,8 @@ def atualizar_usuario(id=None):
             usuario.cpf = cpf
             usuario.dt_nacimento = dt_nascimento
             db.session.commit()
-        data = Usuario.query.all()
-        return render_template('listar-usuarios.html', data=data)
+        usuarios = Usuario.query.all()
+        return redirect(url_for('listar_usuarios', usuarios=usuarios))
 
 
 if __name__ == '__main__':

@@ -1,0 +1,19 @@
+{% include 'base/head.html' %}
+{% include 'base/nav_bar.html' %}
+
+
+<div>
+      <br><br><br>
+      <form action="/atualizar-algoritmos/{{ current_user.nome }}" method="POST">
+          <label>Nome</label>
+              {{ form.nome(class="form-control", value=usuario.nome) }}
+          <label>Algoritmo</label>
+              {{ form.algoritmo(class="form-control", value=usuario.email) }}
+          <label>Senha</label>
+              {{ form.nome(class="form-control", value=usuario.senha) }}
+          <input type="submit" value="Enviar">
+      </form>
+</div>
+
+
+{% include 'base/footer.html' %}

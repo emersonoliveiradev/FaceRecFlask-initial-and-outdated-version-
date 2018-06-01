@@ -1,19 +1,27 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
+<a href="/cadastrar-usuarios">
+    <button class="btn btn-lg btn-success">
+        Cadastrar
+    </button>
+</a>
+<hr>
+
+
 <div class="table-responsive">
         <table class="table">
             <tr>
                 <th>Id</th>
-                <th>Usuário</th>
-                <th>Descrição</th>
-                <th>Algoritmo</th>
-                <th>Data de Criação</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>CPF</th>
+                <th>Data Nascimento</th>
                 <th>Excluir</th>
                 <th>Editar</th>
 
             </tr>
-            {% for u in data %}
+            {% for u in usuarios %}
                 <tr>
                     <td>
                         {{ u.id}}

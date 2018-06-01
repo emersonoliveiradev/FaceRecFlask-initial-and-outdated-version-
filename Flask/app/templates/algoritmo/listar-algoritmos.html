@@ -11,28 +11,27 @@
                 <th>Algoritmo</th>
                 <th>Excluir</th>
                 <th>Editar</th>
-
             </tr>
-            {% for a in algoritmo %}
+            {% for a in algoritmos %}
             <tr>
                 <td>
                     {{ a.id }}
                 </td>
                 <td>
-                    {{ a.nome }}
+                    {{ current_user.nome }}
                 </td>
                 <td>
-
+                    Criar atributo descrição
                 </td>
                 <td>
                     <pre>{{ a.algoritmo }}</pre>
                 </td>
                 <td>
                     <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
-                    <a href="{{ url_for('cadastrar_algoritmo') }}">Apagar?</a>
+                    <a href="{{ url_for('atualizar_algoritmo', id=a.id)}}">Atualizar?</a>
                 </td>
                 <td>
-                    Editar?
+                    <a href="{{ url_for('excluir_algoritmo', id=a.id)}}">Excluir?</a>
                 </td>
             </tr>
             {% endfor %}
