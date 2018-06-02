@@ -1,5 +1,6 @@
 from app import app, db, login_manager, login_user, logout_user, login_required, current_user
 from flask import Flask, render_template, Response, request, redirect, url_for, flash
+
 import os
 
 
@@ -206,6 +207,7 @@ def atualizar_algoritmo(id=None):
         return redirect(url_for('listar_algoritmos'))
 
     return redirect(url_for('listar_algoritmos'))
+
 ################
 
 #Temporario
@@ -213,12 +215,42 @@ base_url = "/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Fla
 
 @app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
 def instanciar_algoritmo(id):
-    algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
-    arq = open("/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos_usuario_id.py", "r+")
-    #os.system("mkdir "+ base_url)
-    #os.system("mkdir -c "+ base_url + "usuario" + current_user.get_id() + current_user.nome)
-    print(("touch -c " + base_url + "usuario" + current_user.get_id() + current_user.nome + "/arq.txt"))
+    url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        arquivo = open(url_arquivo_usuario, "r+")
+        """
+        Caso eu precise ler o arquivo 
+        for linha in arquivo:
+            linha = linha.rstrip()
+            print(linha)
+        """
+        #algoritmos = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
+        algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+        lista_de_algoritmos = []
+        for algoritmo in algoritmos:
+            lista_de_algoritmos.append(algoritmo)
+
+
+        for a in lista_de_algoritmos:
+            print(a.algoritmo)
+            arquivo.write(a.algoritmo)
+            arquivo.write('\n\n\n\n')
+
+        arquivo.close()
+
+        import importlib
+        algoritmo_escolhido = importlib.import_module("app.controllers.algoritmos.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos")
+        print(dir(algoritmo_escolhido))
+        svm = algoritmo_escolhido.SVM()
+        print(dir(svm))
+        return "OK2"
+
+    else:
+        os.mkdir(url_pasta_usuario)
+        os.system("touch " + url_arquivo_usuario)
+        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
 
     return "Ok"
 
