@@ -204,17 +204,17 @@ def atualizar_algoritmo(id=None):
         return render_template('algoritmo/atualizar-algoritmo.html', form=form, algoritmo=algoritmo)
     elif request.method=="POST":
         nome = request.form['nome']
-        algoritmo = request.form['algoritmo']
+        algoritmo_dado = request.form['algoritmo']
         usuario = request.form['usuario']
-        if nome or algoritmo or usuario:
+        if nome or algoritmo_dado or usuario:
             algoritmo = Algoritmo.query.filter_by(id=id).first()
             algoritmo.nome = nome
-            algoritmo.email = email
+            algoritmo.algoritmo = algoritmo_dado
             algoritmo.cpf = cpf
             algoritmo.dt_nacimento = dt_nascimento
             db.session.commit()
-        usuarios = Usuario.query.all()
-        return redirect(url_for('listar_algoritmos', usuarios=usuarios))
+        algoritmo = algoritmo.query.all()
+        return redirect(url_for('listar_algoritmos', algoritmo=algoritmo))
 
 #
 #print(current_user.id)

@@ -6,11 +6,14 @@
       <br><br><br>
       <form action="/atualizar-algoritmos/{{ current_user.nome }}" method="POST">
           <label>Nome</label>
-              {{ form.nome(class="form-control", value=usuario.nome) }}
+              {{ form.nome(class="form-control", value=algoritmo.nome) }}
           <label>Algoritmo</label>
-              {{ form.algoritmo(class="form-control", value=usuario.email) }}
+              <!--Descobrir como se faz isso aqui - value não funciona
+              {{ form.algoritmo(class="form-control", value=algoritmo.algoritmo) }}-->
+              <textarea class="form-control" name="algoritmo" rows="10">{{ algoritmo.algoritmo }}</textarea>
+
           <label>Senha</label>
-              {{ form.nome(class="form-control", value=usuario.senha) }}
+              {{ form.nome(class="form-control", value=algoritmo.usuario) }}
           <input type="submit" value="Enviar">
       </form>
 </div>
