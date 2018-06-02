@@ -1,25 +1,26 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>VisionLab App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+@app.route('/atualizar-usuario/<int:id>', methods=['GET', 'POST'])
+@app.route('/atualizar-usuario', methods=['POST'])
+def atualizar_usuario(id=None):
+    if id!=None and request.method=="GET":
+        usuario = Usuario.query.filter_by(id=id).first()
+        form = CadastrarUsuarioForm()
+        return render_template('usuario/atualizar-usuario.html', form=form, usuario=usuario)
+    elif request.method=="POST":
+        nome = request.form['nome']
+        email = request.form['email']
+        cpf = request.form['cpf']
+        dt_nascimento = request.form['dt_nascimento']
+        if nome or email or cpf or dt_nascimento:
+            usuario = Usuario.query.filter_by(id=id).first()
+            usuario.nome = nome
+            usuario.email = email
+            usuario.cpf = cpf
+            usuario.dt_nacimento = dt_nascimento
+            flash("Atualização realizada com sucesso!")
+            db.session.commit()
+        usuarios = Usuario.query.all()
+        return redirect(url_for('listar_usuarios', usuarios=usuarios))
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <script src="{{ url_for('static', filename='js/bootstrap.js') }}">  </script>
-    <script src="{{ url_for('static', filename='jquery/src/jquery.js') }}">  </script>
-  </head>
-  <body>
-<work></work>
-    <header>
-      <div class="container">
-          <h1 class="logo">VisionLab App</h1>
-      </div>
-    </header>
 
-    {% if name %}
-    <p class="msgm">Seja bem vindo, {{ name }}!</p>
-    {% else %}
-    <p class="msgm">Seja bem vindo! </p>
-    {% endif %}
-  </body>
-</html>
+    <!--Descobrir como se faz isso aqui - value não funciona
+              {{ form.algoritmo(class="form-control", value=algoritmo.algoritmo) }}-->

@@ -4,16 +4,14 @@
 
 <div>
       <br><br><br>
-      <form action="/atualizar-algoritmos/{{ current_user.nome }}" method="POST">
+      <form action="/atualizar-algoritmo/{{ algoritmo.id }}" method="POST">
           <label>Nome</label>
               {{ form.nome(class="form-control", value=algoritmo.nome) }}
-          <label>Algoritmo</label>
-              <!--Descobrir como se faz isso aqui - value não funciona
-              {{ form.algoritmo(class="form-control", value=algoritmo.algoritmo) }}-->
-              <textarea class="form-control" name="algoritmo" rows="10">{{ algoritmo.algoritmo }}</textarea>
-
+          <label>AlgoritmoCerto</label>
+              <textarea class="form-control" rows="5" name="algoritmo">{{ algoritmo.algoritmo }}</textarea>
+          <!--Verificar como definir o valor do form  textarea-->
           <label>Senha</label>
-              {{ form.nome(class="form-control", value=algoritmo.usuario) }}
+              {{ form.usuario(class="form-control", value=algoritmo.usuario) }}
           <input type="submit" value="Enviar">
       </form>
 </div>

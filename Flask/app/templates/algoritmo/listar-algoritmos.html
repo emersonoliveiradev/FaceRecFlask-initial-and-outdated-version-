@@ -1,6 +1,14 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
+
+<a href="/cadastrar-algoritmos">
+    <button class="btn btn-lg btn-success">
+        Cadastrar
+    </button>
+</a>
+<hr>
+
 <div class="table-responsive">
     <form action="#">
 
@@ -8,6 +16,7 @@
             <tr>
                 <th>Id</th>
                 <th>Usuário</th>
+                <th>Nome</th>
                 <th>Descrição</th>
                 <th>Algoritmo</th>
                 <th>Excluir</th>
@@ -17,6 +26,9 @@
             <tr>
                 <td>
                     {{ a.id }}
+                </td>
+                <td>
+                    {{ a.nome }}
                 </td>
                 <td>
                     {{ current_user.nome }}

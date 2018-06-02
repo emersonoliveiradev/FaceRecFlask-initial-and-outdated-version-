@@ -10,8 +10,10 @@ class LoginForm(FlaskForm):
 
 class CadastrarAlgoritmoForm(FlaskForm):
     nome = StringField("nome", validators=[DataRequired()])
-    algoritmo = StringField("algoritmo",  widget=TextArea())
     usuario = StringField("usuario", validators=[DataRequired()])
+    algoritmo = StringField("algoritmo", widget=TextArea())
+    #Verificar como definir o valor do form  textarea
+
 
 class CadastrarUsuarioForm(FlaskForm):
     nome = StringField("email", validators=[DataRequired()])

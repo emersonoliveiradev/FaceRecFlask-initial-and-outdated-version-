@@ -196,25 +196,28 @@ def excluir_algoritmo(id):
 
 
 @app.route('/atualizar-algoritmo/<int:id>', methods=['GET', 'POST'])
-@app.route('/atualizar-algoritmo', methods=['POST'])
 def atualizar_algoritmo(id=None):
     if id!=None and request.method=="GET":
         algoritmo = Algoritmo.query.filter_by(id=id).first()
         form = CadastrarAlgoritmoForm()
         return render_template('algoritmo/atualizar-algoritmo.html', form=form, algoritmo=algoritmo)
-    elif request.method=="POST":
+    elif id and request.method=="POST":
         nome = request.form['nome']
-        algoritmo_dado = request.form['algoritmo']
+        algoritmo_atributo = request.form['algoritmo']
         usuario = request.form['usuario']
-        if nome or algoritmo_dado or usuario:
+        if nome or algoritmo_atributo or usuario:
             algoritmo = Algoritmo.query.filter_by(id=id).first()
             algoritmo.nome = nome
-            algoritmo.algoritmo = algoritmo_dado
-            algoritmo.cpf = cpf
-            algoritmo.dt_nacimento = dt_nascimento
+            algoritmo.algoritmo = algoritmo_atributo
             db.session.commit()
+            flash("Atualização realizada com sucesso!")
+        else:
+            flash("Nenhum valor foi alterado!")
         algoritmo = algoritmo.query.all()
         return redirect(url_for('listar_algoritmos', algoritmo=algoritmo))
+    return redirect(url_for('listar_algoritmos', algoritmo=algoritmo))
+
+
 
 #
 #print(current_user.id)
@@ -336,6 +339,7 @@ def atualizar_usuario(id=None):
             usuario.email = email
             usuario.cpf = cpf
             usuario.dt_nacimento = dt_nascimento
+            flash("Atualização realizada com sucesso!")
             db.session.commit()
         usuarios = Usuario.query.all()
         return redirect(url_for('listar_usuarios', usuarios=usuarios))
