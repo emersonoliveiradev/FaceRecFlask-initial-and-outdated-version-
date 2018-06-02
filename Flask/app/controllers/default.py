@@ -1,5 +1,7 @@
 from app import app, db, login_manager, login_user, logout_user, login_required, current_user
 from flask import Flask, render_template, Response, request, redirect, url_for, flash
+import os
+
 
 #Discocery where is the root path of modules
 from app.controllers.camera import VideoCamera
@@ -52,7 +54,6 @@ def gen_recognition():
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-
 #Original
 @app.route('/video_feed')
 def video_feed():
@@ -64,7 +65,6 @@ def gen(camera):
     while True:
         frame = camera.get_encoded_frame()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
 
 
 @app.route("/about")
@@ -145,9 +145,9 @@ def listar_algoritmos_velho():
     return render_template('listar-algoritmos.html', data=data)
 
 
-####
-#BD#
-####
+############
+#Algortimos#
+############
 @app.route('/cadastrar-algoritmos', methods=['GET', 'POST'])
 def cadastrar_algoritmos():
     if request.method == 'POST':
@@ -206,7 +206,27 @@ def atualizar_algoritmo(id=None):
         return redirect(url_for('listar_algoritmos'))
 
     return redirect(url_for('listar_algoritmos'))
+################
 
+#Temporario
+base_url = "/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos/"
+
+@app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
+def instanciar_algoritmo(id):
+    algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
+    arq = open("/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos_usuario_id.py", "r+")
+    #os.system("mkdir "+ base_url)
+    #os.system("mkdir -c "+ base_url + "usuario" + current_user.get_id() + current_user.nome)
+    print(("touch -c " + base_url + "usuario" + current_user.get_id() + current_user.nome + "/arq.txt"))
+
+
+    return "Ok"
+
+
+
+
+
+#########
 
 
 #Login e Sessão....
@@ -223,9 +243,6 @@ def load_user(id):
     return Usuario.query.filter_by(id=id).first()
 
 
-##########
-#Usuarios#
-##########
 @app.route("/login", methods=['GET','POST'])
 def login():
     form_login = LoginForm()
@@ -244,6 +261,7 @@ def login():
                 return redirect(url_for("login"))
     return render_template('login.html', form_login=form_login)
 
+
 #não tô usando
 @app.route("/usuarios")
 def logando():
@@ -252,17 +270,23 @@ def logando():
     login_user(usuario)
     return "Está logado"
 
+
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
+
 @app.route("/atual")
 @login_required
 def atual():
     return "Atual: " + current_user.nome
 
+
+##########
+#Usuarios#
+##########
 
 @app.route("/cadastrar-usuarios", methods=['GET','POST'])
 def cadastrar_usuarios():
