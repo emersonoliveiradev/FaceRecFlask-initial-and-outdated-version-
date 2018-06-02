@@ -35,7 +35,6 @@ def gen_capture():
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-
 @app.route('/face_recognition')
 def face_recognition():
     return render_template('recognition.html')
@@ -77,7 +76,6 @@ def help():
     return render_template('help.html')
 
 
-
 # Receive variable <name>
 @app.route('/test', defaults={"name": None})
 @app.route('/test/<name>')
@@ -86,7 +84,7 @@ def show_name(name):
 
 
 #######################
-#Algoritmos do Usuário#
+#Algoritmos do Usuário##Excluir depois
 #######################
 @app.route('/crud-algoritmo-velho', methods=['GET', 'POST'])
 def cadastrar_algoritmo_velho():
@@ -123,7 +121,7 @@ def atualizar_algoritmo_velho(id):
     form = CadastrarAlgoritmoForm()
     return render_template('cadastrar-algoritmo.html', form=form)
 
-#Nomes das funções criadas
+
 @app.route('/listar-algoritmos-velho', methods=['GET'])
 def listar_algoritmos_velho():
     nome = "algoritmos_usuario_id.py"
@@ -147,9 +145,7 @@ def listar_algoritmos_velho():
     return render_template('listar-algoritmos.html', data=data)
 
 
-
-
-#########################################################
+####
 #BD#
 ####
 @app.route('/cadastrar-algoritmos', methods=['GET', 'POST'])
@@ -164,16 +160,12 @@ def cadastrar_algoritmos():
             db.session.add(algoritmo)
             db.session.commit()
             flash("Cadastro de algoritmo realizado com sucesso!")
-            flash(current_user.get_id())
-            algoritmo = Algoritmo.query.filter_by(id=current_user.get_id()).all()
-            print(len(algoritmo))
-            return render_template('listar-algoritmos2.html', algoritmo=algoritmo)
+            return redirect(url_for('listar_algoritmos'))
 
     form = CadastrarAlgoritmoForm()
-    return render_template('cadastrar-algoritmo2.html', form=form)
+    return render_template('algoritmo/cadastrar-algoritmos.html', form=form)
 
 
-#Nomes das funções criadas
 @app.route('/listar-algoritmos', methods=['GET'])
 def listar_algoritmos():
     algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
@@ -187,12 +179,10 @@ def excluir_algoritmo(id):
         db.session.delete(algoritmo)
         db.session.commit()
         flash("Exclusão realizada com sucesso!")
-        algoritmos = Usuario.query.all()
-        return redirect(url_for('listar_algoritmos', algoritmos=algoritmos))
+        return redirect(url_for('listar_algoritmos'))
     else:
         flash("Exclusão não conluída!")
-        algoritmos = Algoritmo.query.all()
-        return redirect(url_for('listar_algoritmos', algoritmos=algoritmos))
+        return redirect(url_for('listar_algoritmos'))
 
 
 @app.route('/atualizar-algoritmo/<int:id>', methods=['GET', 'POST'])
@@ -213,13 +203,13 @@ def atualizar_algoritmo(id=None):
             flash("Atualização realizada com sucesso!")
         else:
             flash("Nenhum valor foi alterado!")
-        algoritmo = algoritmo.query.all()
-        return redirect(url_for('listar_algoritmos', algoritmo=algoritmo))
-    return redirect(url_for('listar_algoritmos', algoritmo=algoritmo))
+        return redirect(url_for('listar_algoritmos'))
+
+    return redirect(url_for('listar_algoritmos'))
 
 
 
-#
+#Login e Sessão....
 #print(current_user.id)
 #print(current_user.nome)
 #print(current_user.cpf)
