@@ -244,8 +244,10 @@ def instanciar_algoritmo(id):
         algoritmo_escolhido = importlib.import_module("app.controllers.algoritmos.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos")
         print(dir(algoritmo_escolhido))
         svm = algoritmo_escolhido.SVM()
-        print(dir(svm))
-        return "OK2"
+        #print(dir(svm))
+        algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+        return render_template('algoritmo/listar-algoritmos.html', algoritmos=algoritmos, svm=svm)
+        #return "OK2"
 
     else:
         os.mkdir(url_pasta_usuario)

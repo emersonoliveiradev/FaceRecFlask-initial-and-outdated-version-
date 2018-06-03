@@ -1,8 +1,14 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
+<a href="/listar-algoritmos">
+        <button class="btn btn-lg btn-success">
+            Voltar
+        </button>
+    </a>
+    <hr>
+
 <div>
-      <br><br><br>
       <form action="/cadastrar-algoritmos" method="POST">
           <label>Nome</label>
               {{ form.nome(class="form-control") }}

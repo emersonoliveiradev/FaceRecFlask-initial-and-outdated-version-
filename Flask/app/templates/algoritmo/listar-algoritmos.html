@@ -40,11 +40,19 @@
                     <pre>{{ a.algoritmo }}</pre>
                 </td>
                 <td>
-                    <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
-                    <a href="{{ url_for('atualizar_algoritmo', id=a.id)}}">Atualizar?</a>
+                    <a href="{{ url_for('atualizar_algoritmo', id=a.id)}}">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#atualizarModalCenter">
+                            Atualizar
+                        </button>
+                    </a>
+
                 </td>
                 <td>
-                    <a href="{{ url_for('excluir_algoritmo', id=a.id)}}">Excluir?</a>
+                    <a href="{{ url_for('excluir_algoritmo', id=a.id)}}">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirModalCenter">
+                            Remover
+                        </button>
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -52,15 +60,53 @@
     </form>
 </div>
 
-<div class="table-responsive">
-    <form action="#">
 
-        <table class="table">
-            <tr>
-                <th>Id</th>
-                <th>Usuário</th>
-            </tr>
-        </table>
-    </form>
+
+<!--http://www.bogotobogo.com/python/Flask/Python_Flask_Blog_App_Tutorial_4.php-->
+
+
+
+<!-- Modal Atualizar -->
+<div class="modal fade" id="atualizarModalCenter" tabindex="-1" role="dialog" aria-labelledby="atualizarModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="atualizarModalLongTitle">Atualizar Algoritmo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Modal Atualizar -->
+<div class="modal fade" id="excluirModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="excluirModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% include 'base/footer.html' %}
