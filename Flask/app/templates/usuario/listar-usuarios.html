@@ -16,8 +16,8 @@
                 <th>Email</th>
                 <th>CPF</th>
                 <th>Data Nascimento</th>
-                <th>Excluir</th>
-                <th>Editar</th>
+                <th>Atualizar</th>
+                <th>Remover</th>
 
             </tr>
             {% for u in usuarios %}
@@ -39,10 +39,18 @@
                     </td>
                     <td>
                         <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
-                        <a href="{{ url_for('atualizar_usuario', id=u.id)}}">Atualizar?</a>
+                        <a href="{{ url_for('atualizar_usuario', id=u.id)}}">
+                            <button class="btn btn-primary">
+                                Atualizar
+                            </button>
+                        </a>
                     </td>
                     <td>
-                        <a href="{{ url_for('excluir_usuario', id=u.id)}}">Excluir?</a>
+                        <a href="{{ url_for('excluir_usuario', id=u.id)}}">
+                            <button class="btn btn-danger">
+                                Remover
+                           </button>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

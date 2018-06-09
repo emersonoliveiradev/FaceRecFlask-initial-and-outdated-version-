@@ -14,7 +14,9 @@ from app.controllers.generator import Generator
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm
 from app.models.tables import Algoritmo, Pessoa, Usuario
 
-
+##################
+#Básicas e Câmera#
+##################
 @app.route('/home')
 @app.route('/index')
 @app.route('/')
@@ -25,6 +27,7 @@ def index():
 @app.route("/show_capture")
 def show_capture():
     return render_template('capture.html')
+
 
 @app.route('/face_capture')
 def face_capture():
@@ -119,14 +122,12 @@ def cadastrar_algoritmo_velho():
     form = CadastrarAlgoritmoForm()
     return render_template('cadastrar-algoritmo.html', form=form)
 
-
 @app.route('/atualizar-algoritmo-velho/<int:id>', methods=['GET'])
 def atualizar_algoritmo_velho(id):
     if id:
         print("Existe")
     form = CadastrarAlgoritmoForm()
     return render_template('cadastrar-algoritmo.html', form=form)
-
 
 @app.route('/listar-algoritmos-velho', methods=['GET'])
 def listar_algoritmos_velho():
