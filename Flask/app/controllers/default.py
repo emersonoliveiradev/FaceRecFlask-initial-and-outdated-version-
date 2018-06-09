@@ -30,6 +30,7 @@ def show_capture():
 def face_capture():
     return Response(gen_capture(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 #Tentar mandar uma chave aqui pela url, liberando p capturar a imagem
 def gen_capture():
     cap = Capture()
@@ -42,9 +43,11 @@ def gen_capture():
 def face_recognition():
     return render_template('recognition.html')
 
+
 @app.route('/face_recognition_gen')
 def face_recognition_gen():
     return Response(gen_recognition(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 def gen_recognition():
     rec = Recognizer()
@@ -61,6 +64,7 @@ def video_feed():
     #Retorna o que o gerador (função gen()) está gerando
     return Response(gen(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 #Original
 def gen(camera):
     while True:
@@ -68,13 +72,14 @@ def gen(camera):
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-@app.route("/about")
-def about():
-    return render_template('about.html')
+@app.route("/sobre")
+def sobre():
+    return render_template('sobre.html')
 
-@app.route("/help")
-def help():
-    return render_template('help.html')
+
+@app.route("/ajuda")
+def ajuda():
+    return render_template('ajuda.html')
 
 
 # Receive variable <name>
@@ -208,6 +213,12 @@ def atualizar_algoritmo(id=None):
 
     return redirect(url_for('listar_algoritmos'))
 
+#######################
+#crawler_de_algoritmos#
+#######################
+
+
+
 ################
 
 #Temporario
@@ -255,9 +266,6 @@ def instanciar_algoritmo(id):
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
 
     return "Ok"
-
-
-
 
 
 #########
