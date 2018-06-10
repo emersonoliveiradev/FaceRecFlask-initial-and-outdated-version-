@@ -27,10 +27,10 @@
                     {{ a.id }}
                 </td>
                 <td>
-                    {{ a.nome }}
+                    {{ current_user.nome }}
                 </td>
                 <td>
-                    {{ current_user.nome }}
+                    {{ a.nome }}
                 </td>
                 <td>
                     Criar atributo descrição
@@ -57,7 +57,7 @@
         </table>
     </form>
 </div>
-
+{{ svm }}
 
 
 <!--http://www.bogotobogo.com/python/Flask/Python_Flask_Blog_App_Tutorial_4.php-->

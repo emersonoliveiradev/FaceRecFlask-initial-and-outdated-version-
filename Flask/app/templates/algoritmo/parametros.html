@@ -1,0 +1,24 @@
+{% include 'base/head.html' %}
+{% include 'base/nav_bar.html' %}
+
+
+<a href="/cadastrar-algoritmos">
+    <button class="btn btn-lg btn-success">
+        Cadastrar
+    </button>
+</a>
+
+<hr>
+
+<div>
+      <form action="/mapeado-algoritmo/{{ parametros=parametros }}" method="POST">
+          {% for p_nome in parametros: %}
+              <label>{{ p_nome }}</label>
+                <input id="form" class="form-control" name={{ p_nome }} type="text">
+          {% endfor%}
+          <input class="btn btn-success" type="submit" value="Enviar">
+      </form>
+</div>
+
+
+{% include 'base/footer.html' %}

@@ -22,3 +22,8 @@ class CadastrarUsuarioForm(FlaskForm):
     cpf = StringField("email", validators=[DataRequired()])
     dt_nascimento = StringField("email", validators=[DataRequired()])
 
+class DefinirParametrosForm(FlaskForm):
+    p1 = StringField("p1", validators=[DataRequired()])
+    p2 = StringField("p2", validators=[DataRequired()])
+    p3 = StringField("p3", validators=[DataRequired()])
+
