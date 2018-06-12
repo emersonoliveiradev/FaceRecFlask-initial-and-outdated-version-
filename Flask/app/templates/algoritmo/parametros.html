@@ -11,10 +11,11 @@
 <hr>
 
 <div>
-      <form action="/mapeado-algoritmo/{{ parametros=parametros }}" method="POST">
+      <form action="/mapeado-algoritmo/{{ parametros }}" method="POST">
           {% for p_nome in parametros: %}
               <label>{{ p_nome }}</label>
-                <input id="form" class="form-control" name={{ p_nome }} type="text">
+                <input class="form-control" name="lista_nome[]"  value="{{ p_nome }}" type="hidden">
+                <input class="form-control" name="lista_valor[]" type="text">
           {% endfor%}
           <input class="btn btn-success" type="submit" value="Enviar">
       </form>

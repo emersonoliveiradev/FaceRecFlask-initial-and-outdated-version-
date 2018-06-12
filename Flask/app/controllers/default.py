@@ -21,6 +21,9 @@ from app.models.tables import Algoritmo, Pessoa, Usuario
 @app.route('/index')
 @app.route('/')
 def index():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     return render_template('index.html')
 
 
@@ -89,6 +92,9 @@ def ajuda():
 @app.route('/test', defaults={"name": None})
 @app.route('/test/<name>')
 def show_name(name):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     return render_template('test.html', name=name)
 
 
@@ -97,6 +103,9 @@ def show_name(name):
 #######################
 @app.route('/crud-algoritmo-velho', methods=['GET', 'POST'])
 def cadastrar_algoritmo_velho():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         nome = request.form['nome']
         algoritmo = request.form['conteudo']
@@ -124,6 +133,9 @@ def cadastrar_algoritmo_velho():
 
 @app.route('/atualizar-algoritmo-velho/<int:id>', methods=['GET'])
 def atualizar_algoritmo_velho(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     if id:
         print("Existe")
     form = CadastrarAlgoritmoForm()
@@ -131,6 +143,9 @@ def atualizar_algoritmo_velho(id):
 
 @app.route('/listar-algoritmos-velho', methods=['GET'])
 def listar_algoritmos_velho():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     nome = "algoritmos_usuario_id.py"
 
     arq = open("/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos_usuario_id.py", "r+")
@@ -158,6 +173,9 @@ def listar_algoritmos_velho():
 
 @app.route("/cadastrar-usuarios", methods=['GET', 'POST'])
 def cadastrar_usuarios():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         print("Entrou")
         nome = request.form['nome']
@@ -184,12 +202,18 @@ def cadastrar_usuarios():
 
 @app.route('/listar-usuarios', methods=['GET', 'POST'])
 def listar_usuarios():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     usuarios = Usuario.query.all()
     return render_template('usuario/listar-usuarios.html', usuarios=usuarios)
 
 
 @app.route('/excluir-usuario/<int:id>', methods=['GET', 'POST'])
 def excluir_usuario(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     usuario = Usuario.query.filter_by(id=id).first()
     if usuario:
         db.session.delete(usuario)
@@ -206,6 +230,9 @@ def excluir_usuario(id):
 @app.route('/atualizar-usuario/<int:id>', methods=['GET', 'POST'])
 @app.route('/atualizar-usuario', methods=['POST'])
 def atualizar_usuario(id=None):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     if id != None and request.method == "GET":
         usuario = Usuario.query.filter_by(id=id).first()
         form = CadastrarUsuarioForm()
@@ -233,6 +260,9 @@ def atualizar_usuario(id=None):
 ############
 @app.route('/cadastrar-algoritmos', methods=['GET', 'POST'])
 def cadastrar_algoritmos():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
         nome = request.form['nome']
         algoritmo = request.form['algoritmo']
@@ -251,12 +281,18 @@ def cadastrar_algoritmos():
 
 @app.route('/listar-algoritmos', methods=['GET'])
 def listar_algoritmos():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
     return render_template('algoritmo/listar-algoritmos.html', algoritmos=algoritmos)
 
 
 @app.route('/excluir-algoritmo/<int:id>', methods=['GET', 'POST'])
 def excluir_algoritmo(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     algoritmo = Algoritmo.query.filter_by(id=id).first()
     if algoritmo:
         db.session.delete(algoritmo)
@@ -270,6 +306,9 @@ def excluir_algoritmo(id):
 
 @app.route('/atualizar-algoritmo/<int:id>', methods=['GET', 'POST'])
 def atualizar_algoritmo(id=None):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     if id!=None and request.method=="GET":
         algoritmo = Algoritmo.query.filter_by(id=id).first()
         form = CadastrarAlgoritmoForm()
@@ -301,6 +340,9 @@ base_url = "/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Fla
 
 @app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
 def instanciar_algoritmo(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
@@ -348,6 +390,9 @@ def instanciar_algoritmo(id):
 #######################
 @app.route('/mapear-algoritmo/<int:id>', methods=['GET'])
 def mapear_algoritmo(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
@@ -382,16 +427,29 @@ def mapear_algoritmo(id):
 
 @app.route('/mapeado-algoritmo/<parametros>', methods=['POST'])
 def mapeado_algoritmo(parametros):
-    if request.method == "POST":
-        print(type(parametros))
-        for p in parametros:
-            print(request.form[ab])
-        return "ok"
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    lista_nome = request.form.getlist("lista_nome[]")
+    lista_valor = request.form.getlist("lista_valor[]")
+    print(lista_nome)
+    print(lista_valor)
+
+
+    #if request.method == "POST":
+        #for p in parametros:
+            #print(p)
+
+
+    return "ok"
 
 
 
 @app.route('/instanciar-algoritmo-funciona/<int:id>', methods=['GET'])
 def instanciar_algoritmo_funciona(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
@@ -458,20 +516,23 @@ def login():
     if request.method == "POST":
         if form_login.validate_on_submit():
             usuario = Usuario.query.filter_by(email=form_login.email.data).first()
-            flash(usuario.senha)
             if usuario and usuario.senha == form_login.senha.data:
                 login_user(usuario, force=True, remember=True)
-                flash("Logado!")
+                flash("Seja bem-vindo " + usuario.nome + "!")
                 return redirect(url_for("index"))
             else:
                 flash("Login Inválido!")
                 return redirect(url_for("login"))
+
     return render_template('login.html', form_login=form_login)
 
 
 #não tô usando
 @app.route("/usuarios")
 def logando():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     usuario = Usuario.query.filter_by(senha='123').first()
     #Adiciona todos os dados do bd da pesssoa
     login_user(usuario)
@@ -481,6 +542,9 @@ def logando():
 @app.route("/logout")
 @login_required
 def logout():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     logout_user()
     return redirect(url_for("index"))
 
@@ -488,10 +552,17 @@ def logout():
 @app.route("/atual")
 @login_required
 def atual():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
     return "Atual: " + current_user.nome
 
-
-
+##############
+#Cadastrar-se#
+##############
+@app.route("/cadastrar-se")
+def cadastrar():
+    return render_template('cadastrar.html')
 
 
 if __name__ == '__main__':
