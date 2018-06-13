@@ -401,22 +401,38 @@ def mapear_algoritmo(id):
         algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
 
         meu_algoritmo = algoritmo.algoritmo
-        lista_de_parametros = ["ValorA", "ValorB","ValorC","ValorD"]
-        """
-        mapear e identificar paramentros aqui
-        for a in meu_algoritmo:
-            
-            if a == "<":
-                    print(a.number())
+        #lista_de_parametros = ["ValorA", "ValorB","ValorC","ValorD", "ValorE"]
 
-        if "<<" in meu_algoritmo:
-            print("OK")
-    
-        Depois só retornar a lista com os parametros            
-        """
-        print("Entrou")
+        #mapear e identificar paramentros aqui
+        print(meu_algoritmo)
+        frase = meu_algoritmo
+
+        tamanho = len(frase)
+        param = []
+        i = 0
+
+        for i in range(0, tamanho):
+            if frase[i] == "<":
+                if frase[i + 1] == "<":
+                    j = i + 2
+                    for j in range(j, tamanho):
+                        if frase[j] == ">":
+                            if frase[j + 1] == ">":
+                                new = ""
+                                for c in range(i + 2, j):
+                                    new += frase[c]
+                                param.append(new)
+                                print("Entrou!!!!!")
+                                break
+
+        #Lista com parametros aqui...
+        for p in param:
+            print(p)
+        #Depois só retornar a lista com os parametros
+
+
         form_parametros = DefinirParametrosForm()
-        return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=lista_de_parametros)
+        return "0"#render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
     else:
         os.mkdir(url_pasta_usuario)
         os.system("touch " + url_arquivo_usuario)
@@ -425,21 +441,26 @@ def mapear_algoritmo(id):
     return "Ok"
 
 
-@app.route('/mapeado-algoritmo/<parametros>', methods=['POST'])
-def mapeado_algoritmo(parametros):
+@app.route('/mapeado-algoritmo/<int:id>', methods=['POST'])
+def mapeado_algoritmo(id):
     if not current_user.get_id():
         return redirect(url_for('login'))
 
-    lista_nome = request.form.getlist("lista_nome[]")
-    lista_valor = request.form.getlist("lista_valor[]")
-    print(lista_nome)
-    print(lista_valor)
+    if request.method == "POST":
+        lista_nome = request.form.getlist("lista_nome[]")
+        lista_valor = request.form.getlist("lista_valor[]")
+        print(lista_nome)
+        print(lista_valor)
+        #Agora é jogar em uma função q vai substituir os nomes pelos valoress
 
+        url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
+        url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
-    #if request.method == "POST":
-        #for p in parametros:
-            #print(p)
-
+        if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+            arquivo = open(url_arquivo_usuario, "r+")
+            algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
+            meu_algoritmo = algoritmo.algoritmo
+            print(meu_algoritmo)
 
     return "ok"
 

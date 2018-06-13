@@ -11,7 +11,7 @@
 <hr>
 
 <div>
-      <form action="/mapeado-algoritmo/{{ parametros }}" method="POST">
+      <form action="/mapeado-algoritmo/{{ id_algoritmo }}" method="POST">
           {% for p_nome in parametros: %}
               <label>{{ p_nome }}</label>
                 <input class="form-control" name="lista_nome[]"  value="{{ p_nome }}" type="hidden">
