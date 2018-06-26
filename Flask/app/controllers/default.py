@@ -432,7 +432,7 @@ def mapear_algoritmo(id):
 
 
         form_parametros = DefinirParametrosForm()
-        return "0"#render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
+        return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
     else:
         os.mkdir(url_pasta_usuario)
         os.system("touch " + url_arquivo_usuario)
@@ -451,18 +451,18 @@ def mapeado_algoritmo(id):
         lista_valor = request.form.getlist("lista_valor[]")
         print(lista_nome)
         print(lista_valor)
-        #Agora é jogar em uma função q vai substituir os nomes pelos valoress
 
         url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
         url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
         if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+            print("Foi Aqui - Agora resta a função de substituição dos parâmetros pelos valores")
             arquivo = open(url_arquivo_usuario, "r+")
             algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
             meu_algoritmo = algoritmo.algoritmo
-            print(meu_algoritmo)
+            #print(meu_algoritmo)
 
-    return "ok"
+    return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
 
 
 
