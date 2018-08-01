@@ -1,3 +1,9 @@
+Criar ambiente virtual
+mkvirtualenv cv -p python3
+
+Acessar ambiente virtual
+workon cv
+
 Rodar projeto
 $ python run.py runsever
 

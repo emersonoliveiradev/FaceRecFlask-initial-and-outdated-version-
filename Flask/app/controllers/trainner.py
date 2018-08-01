@@ -4,9 +4,10 @@ import os
 
 class Trainner(object):
     def __init__(self):
-        self.eigenface = cv2.face.createEigenFaceRecognizer() #Não colocar os números aqui dentro
-        self.fisherface = cv2.face.createFisherFaceRecognizer()
-        self.lbph = cv2.face.createLBPHFaceRecognizer()
+        #self.eigenface = cv2.face.createEigenFaceRecognizer() #Não colocar os números aqui dentro
+        self.eigenface = cv2.face.EigenFaceRecognizer_create()  # Não colocar os números aqui dentro
+        #self.fisherface = cv2.face.createFisherFaceRecognizer()
+        #self.lbph = cv2.face.createLBPHFaceRecognizer()
 
     def get_face_id(self):
         #List the files in the database_faces and add the directory

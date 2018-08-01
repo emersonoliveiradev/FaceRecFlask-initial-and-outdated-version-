@@ -3,14 +3,13 @@ from flask import Flask, render_template, Response, request, redirect, url_for, 
 
 import os
 
-
-#Discocery where is the root path of modules
+#Descobrir onde está a pasta root dos módulos
 from app.controllers.camera import VideoCamera
 from app.controllers.capture import Capture
 from app.controllers.recognizer import Recognizer
 from app.controllers.generator import Generator
 
-#Forms e Tables
+#Formulários e tabelas
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm
 from app.models.tables import Algoritmo, Pessoa, Usuario
 
@@ -167,9 +166,9 @@ def listar_algoritmos_velho():
     return render_template('listar-algoritmos.html', data=data)
 
 
-##########
+###########
 # Usuarios#
-##########
+###########
 
 @app.route("/cadastrar-usuarios", methods=['GET', 'POST'])
 def cadastrar_usuarios():
@@ -256,7 +255,7 @@ def atualizar_usuario(id=None):
 
 
 ############
-#Algortimos#
+#Algoritmos#
 ############
 @app.route('/cadastrar-algoritmos', methods=['GET', 'POST'])
 def cadastrar_algoritmos():
@@ -334,7 +333,6 @@ def atualizar_algoritmo(id=None):
 
 
 ################
-
 #Temporario
 base_url = "/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos/"
 
