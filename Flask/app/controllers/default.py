@@ -22,7 +22,6 @@ from app.models.tables import Algoritmo, Pessoa, Usuario
 def index():
     if not current_user.get_id():
         return redirect(url_for('login'))
-
     return render_template('index.html')
 
 
@@ -169,7 +168,6 @@ def listar_algoritmos_velho():
 ###########
 # Usuarios#
 ###########
-
 @app.route("/cadastrar-usuarios", methods=['GET', 'POST'])
 def cadastrar_usuarios():
     if not current_user.get_id():
@@ -334,8 +332,19 @@ def atualizar_algoritmo(id=None):
 
 ################
 #Temporario
-base_url = "/home/haw/PycharmProjects/FaceRecFlask/.virtualenvs/FaceRecFlask/Flask/app/controllers/algoritmos/"
+########
+# Efetua a criação da pasta com o nome do usuário e a criação/instanciação de seus algoritmos
+#
 
+##Tem que definir uma maneira de pega]r o nome da máquina/usuário
+    # Atomático ou ele mesmo informando
+
+#nome_usuario = os.popen("users").read()
+#print("Aqui" + str(nome_usuario).strip())
+#print("Aqui2")
+base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/controllers/algoritmos/"
+
+#Acho que não funciona
 @app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
 def instanciar_algoritmo(id):
     if not current_user.get_id():
@@ -463,7 +472,8 @@ def mapeado_algoritmo(id):
     return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
 
 
-
+#Esse serve para muitos algoritmos 30/09/18
+"""
 @app.route('/instanciar-algoritmo-funciona/<int:id>', methods=['GET'])
 def instanciar_algoritmo_funciona(id):
     if not current_user.get_id():
@@ -474,12 +484,12 @@ def instanciar_algoritmo_funciona(id):
 
     if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
         arquivo = open(url_arquivo_usuario, "r+")
-        """
-        Caso eu precise ler o arquivo 
-        for linha in arquivo:
-            linha = linha.rstrip()
-            print(linha)
-        """
+        
+        #Caso eu precise ler o arquivo
+        #for linha in arquivo:
+        #    linha = linha.rstrip()
+        #    print(linha)
+        
         # algoritmos = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
         algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
         lista_de_algoritmos = []
@@ -511,6 +521,32 @@ def instanciar_algoritmo_funciona(id):
     return "Ok"
 
 #########
+"""
+
+
+#Objetivo aqui é colocar no arquivo apenas o algoritmo que eu vou instanciar
+@app.route('/instanciar-algoritmo-funciona/<int:id>', methods=['GET'])
+def instanciar_algoritmo_funciona(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
+
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        arquivo = open(url_arquivo_usuario, "r+")
+        #Retorna um objeto do tipo Algoritmo com seus atributos (id, nome, algoritmo, usuario)
+        algoritmo = Algoritmo.query.filter_by(usuario=current_user.get_id(), id=id).first()
+        print(algoritmo.algoritmo)
+        arquivo.write(algoritmo.algoritmo)
+        arquivo.write('\n\n\n\n')
+        arquivo.close()
+    else:
+        os.mkdir(url_pasta_usuario)
+        os.system("touch " + url_arquivo_usuario)
+        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+
+    return "Ok"
 
 
 #Login e Sessão....

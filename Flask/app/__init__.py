@@ -19,7 +19,7 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 manager.add_command('runserver', Server(host="0.0.0.0", port=8000))
 
-#Instância da Login-Manager
+#Instancia da Login-Manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
