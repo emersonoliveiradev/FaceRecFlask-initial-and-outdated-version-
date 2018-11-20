@@ -1,17 +1,21 @@
+# -*- coding: utf-8 -*-
+
+
 from app import app, db, login_manager, login_user, logout_user, login_required, current_user
 from flask import Flask, render_template, Response, request, redirect, url_for, flash
 
-import os
-
-#Descobrir onde está a pasta root dos módulos
+# Descobrir onde está a pasta root dos módulos
 from app.controllers.camera import VideoCamera
 from app.controllers.capture import Capture
 from app.controllers.recognizer import Recognizer
 from app.controllers.generator import Generator
 
-#Formulários e tabelas
+# Formulários e tabelas
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm
 from app.models.tables import Algoritmo, Pessoa, Usuario
+
+import os
+
 
 ##################
 #Básicas e Câmera#
@@ -35,7 +39,7 @@ def face_capture():
     return Response(gen_capture(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-#Tentar mandar uma chave aqui pela url, liberando p capturar a imagem
+# Tentar mandar uma chave aqui pela url, liberando p capturar a imagem
 def gen_capture():
     cap = Capture()
     while True:
@@ -62,20 +66,21 @@ def gen_recognition():
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-#Original
+# Original
 @app.route('/video_feed')
 def video_feed():
     #Retorna o que o gerador (função gen()) está gerando
     return Response(gen(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-#Original
+# Original
 def gen(camera):
     while True:
         frame = camera.get_encoded_frame()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
+# Criar
 @app.route("/sobre")
 def sobre():
     return render_template('sobre.html')
@@ -327,9 +332,6 @@ def atualizar_algoritmo(id=None):
     return redirect(url_for('listar_algoritmos'))
 
 
-
-
-
 ################
 #Temporario
 ########
@@ -395,6 +397,11 @@ def instanciar_algoritmo(id):
 #######################
 #crawler_de_algoritmos# Ver aqui
 #######################
+#Verifica se existe alguém logado
+#Verifica se a pasta e o arquivo do usuário já existem
+#Se não existir, cria e volta a recarregar a página
+#Abre o arquivo do usuário
+#Busca o algoritmo selecionado
 @app.route('/mapear-algoritmo/<int:id>', methods=['GET'])
 def mapear_algoritmo(id):
     if not current_user.get_id():
@@ -403,6 +410,8 @@ def mapear_algoritmo(id):
     url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
 
+
+    #existe a pasta e o arquivo
     if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
         arquivo = open(url_arquivo_usuario, "r+")
         algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
@@ -418,6 +427,9 @@ def mapear_algoritmo(id):
         param = []
         i = 0
 
+        #Vasculha o código atrás das bandeiras
+        #Definido onde está a "bandeira" dos parâmetros definidos
+        #Extrai o nome do parâmetro
         for i in range(0, tamanho):
             if frase[i] == "<":
                 if frase[i + 1] == "<":
@@ -425,11 +437,10 @@ def mapear_algoritmo(id):
                     for j in range(j, tamanho):
                         if frase[j] == ">":
                             if frase[j + 1] == ">":
-                                new = ""
+                                novo_parametro = ""             #Limpar a variável
                                 for c in range(i + 2, j):
-                                    new += frase[c]
+                                    novo_parametro += frase[c]
                                 param.append(new)
-                                print("Entrou!!!!!")
                                 break
 
         #Lista com parametros aqui...
@@ -441,11 +452,12 @@ def mapear_algoritmo(id):
         form_parametros = DefinirParametrosForm()
         return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
     else:
+        #Criar a pasta do usuário e o arquivo
         os.mkdir(url_pasta_usuario)
         os.system("touch " + url_arquivo_usuario)
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+        return redirect(url_for('mapear_algoritmo', id=id))
 
-    return "Ok"
 
 
 @app.route('/mapeado-algoritmo/<int:id>', methods=['POST'])
@@ -547,6 +559,25 @@ def instanciar_algoritmo_funciona(id):
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
 
     return "Ok"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #Login e Sessão....
