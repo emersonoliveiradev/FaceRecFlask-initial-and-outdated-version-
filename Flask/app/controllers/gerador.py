@@ -1,6 +1,6 @@
 from app.controllers.camera import VideoCamera
 
-class Generator(object):
+class Gerador(object):
     def __init__(self):
         self.video_camera = VideoCamera()
 

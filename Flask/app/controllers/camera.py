@@ -1,25 +1,29 @@
 import cv2
 
 class VideoCamera(object):
+    """
+    Documentação da Classe
+    """
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)
+        self.captura = cv2.VideoCapture(1)
 
     def __del__(self):
-        self.cap.release()
+        self.captura.release()
 
     def get_decoded_frame(self):
-        ret, frame = self.cap.read()
+        # Decodificar frame para enviar
+        ret, frame = self.captura.read()
         return frame
 
     def get_encoded_frame(self):
-        ret, frame = self.cap.read()
-        #Encode frame
+        ret, frame = self.captura.read()
+        # Codificar frame para enviar
         ret, jpeg = cv2.imencode('.jpg', frame)
         return jpeg.tostring()
 
     def get_frame(self):
-         ret, frame = self.cap.read()
-         # Encode frame
+         ret, frame = self.captura.read()
+         # Codificar frame para enviar
          ret, jpeg = cv2.imencode('.jpg', frame)
          return jpeg.tostring()
 

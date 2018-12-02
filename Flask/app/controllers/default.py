@@ -6,9 +6,9 @@ from flask import Flask, render_template, Response, request, redirect, url_for, 
 
 # Descobrir onde está a pasta root dos módulos
 from app.controllers.camera import VideoCamera
-from app.controllers.capture import Capture
-from app.controllers.recognizer import Recognizer
-from app.controllers.generator import Generator
+from app.controllers.capturar import Capturar
+from app.controllers.reconhecer import Reconhecer
+from app.controllers.gerador import Gerador
 
 # Formulários e tabelas
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm
@@ -29,41 +29,52 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/show_capture")
-def show_capture():
-    return render_template('capture.html')
+# 1.1 - Cria o template captura.html (Ele chama a rota /capturar_face)
+@app.route("/mostrar_captura")
+def mostrar_captura():
+    return render_template('captura.html')
 
+# 1.2 - Usado pelo mostrar_captura. Retorna a imagem passada pela Função Geradora gen_capturar()
+@app.route('/capturar_face')
+def capturar_face():
+    return Response(gen_capturar(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/face_capture')
-def face_capture():
-    return Response(gen_capture(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-# Tentar mandar uma chave aqui pela url, liberando p capturar a imagem
-def gen_capture():
-    cap = Capture()
+# 1.3 - Tratamento do frame (detectar olhos e face) e yield gerador
+def gen_capturar():
+    cap = Capturar()
     while True:
-        frame = cap.capture2()
+        # Chamo a função capturar
+        frame = cap.captura_detectar()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
-@app.route('/face_recognition')
-def face_recognition():
-    return render_template('recognition.html')
 
+# 2.1 - Cria o template reconhecer.html (Ele chama a rota /gerador_reconhecer_face)
+@app.route('/reconhecer_face')
+def reconhecer_face():
+    return render_template('reconhecer.html')
 
-@app.route('/face_recognition_gen')
-def face_recognition_gen():
-    return Response(gen_recognition(), mimetype='multipart/x-mixed-replace; boundary=frame')
+# 2.2 - Usado pelo reconhecer_face. Retorna a imagem passada pela Função Geradora gerador_reconhecer_face()
+@app.route('/gerador_reconhecer_face')
+def gerador_reconhecer_face():
+    return Response(gerador_reconhecer(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
-def gen_recognition():
-    rec = Recognizer()
+# 2.3 - Tratamento do frame (detectar face e reconhecer)e yield gerador
+def gerador_reconhecer():
+    rec = Reconhecer()
     while True:
         frame = rec.rec_detectar()
         if frame == False:
             continue
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+
+
+
+
+
+
 
 
 # Original
@@ -346,56 +357,10 @@ def atualizar_algoritmo(id=None):
 #print("Aqui2")
 base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/controllers/algoritmos/"
 
-#Acho que não funciona
-@app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
-def instanciar_algoritmo(id):
-    if not current_user.get_id():
-        return redirect(url_for('login'))
 
-    url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
-    url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
-
-    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
-        arquivo = open(url_arquivo_usuario, "r+")
-        """
-        Caso eu precise ler o arquivo 
-        for linha in arquivo:
-            linha = linha.rstrip()
-            print(linha)
-        """
-        #algoritmos = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
-        algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
-
-        for a in algoritmo:
-            print(a.algoritmo)
-            arquivo.write(a.algoritmo)
-            arquivo.write('\n\n\n\n')
-
-        arquivo.close()
-
-        import importlib
-
-        #classe = importlib.import_module("app.controllers.algoritmos.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos" + ".Eigenfaces")
-        pacote = importlib.import_module("app.controllers.algoritmos.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos")
-        print(type(pacote))
-        #print(dir(classe))
-        #algoritmo_escolhido = pacote.nomeDoAlgoritmo()
-
-        #print(dir(svm))
-        algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
-        svm="A"
-        return render_template('algoritmo/listar-algoritmos.html', algoritmos=algoritmos, svm=svm)
-    else:
-        os.mkdir(url_pasta_usuario)
-        os.system("touch " + url_arquivo_usuario)
-        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
-
-    return "Ok"
-
-
-
+#Funciona perfeitamente
 #######################
-#crawler_de_algoritmos# Ver aqui
+#crawler_de_algoritmos#
 #######################
 #Verifica se existe alguém logado
 #Verifica se a pasta e o arquivo do usuário já existem
@@ -440,7 +405,7 @@ def mapear_algoritmo(id):
                                 novo_parametro = ""             #Limpar a variável
                                 for c in range(i + 2, j):
                                     novo_parametro += frase[c]
-                                param.append(new)
+                                param.append(novo_parametro)
                                 break
 
         #Lista com parametros aqui...
@@ -448,8 +413,11 @@ def mapear_algoritmo(id):
             print(p)
         #Depois só retornar a lista com os parametros
 
+        #verificar se salvo no banco de dados...
+        #verificar se salvo no banco de dados...
 
         form_parametros = DefinirParametrosForm()
+        #Template que mostra os nomes dos parâmetros e os campos vazios pra preencher
         return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
     else:
         #Criar a pasta do usuário e o arquivo
@@ -458,16 +426,17 @@ def mapear_algoritmo(id):
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
         return redirect(url_for('mapear_algoritmo', id=id))
 
-
-
+#
 @app.route('/mapeado-algoritmo/<int:id>', methods=['POST'])
 def mapeado_algoritmo(id):
     if not current_user.get_id():
         return redirect(url_for('login'))
 
     if request.method == "POST":
+        #Pegar as listas que criei no template, de nome e valor - OK
         lista_nome = request.form.getlist("lista_nome[]")
         lista_valor = request.form.getlist("lista_valor[]")
+        #Acesso pelo Índice - print(lista_nome[1]) -
         print(lista_nome)
         print(lista_valor)
 
@@ -479,9 +448,23 @@ def mapeado_algoritmo(id):
             arquivo = open(url_arquivo_usuario, "r+")
             algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).first()
             meu_algoritmo = algoritmo.algoritmo
-            #print(meu_algoritmo)
 
-    return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
+            # frase2 = ["param1", "param2", "param3", "param4"]
+            i=0
+            for p in lista_nome:
+                #meu_algoritmo = meu_algoritmo.replace("<<" + str(p) + ">>", str(p) + "=" + lista_valor[i])
+                meu_algoritmo = meu_algoritmo.replace("<<" + str(p) + ">>", lista_valor[i])
+                print(meu_algoritmo)
+                i+=1
+
+            arquivo.write(meu_algoritmo)
+            arquivo.write('\n\n\n\n')
+            arquivo.close()
+
+
+    return "ok"
+    #return redirect(url_for('instanciar_algoritmo_funciona', id=id, lista_nome=lista_nome, lista_valor=lista_valor))
+    #return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
 
 
 #Esse serve para muitos algoritmos 30/09/18
@@ -549,7 +532,21 @@ def instanciar_algoritmo_funciona(id):
         arquivo = open(url_arquivo_usuario, "r+")
         #Retorna um objeto do tipo Algoritmo com seus atributos (id, nome, algoritmo, usuario)
         algoritmo = Algoritmo.query.filter_by(usuario=current_user.get_id(), id=id).first()
-        print(algoritmo.algoritmo)
+
+        #Receber os demais valores do url_for()
+
+        print("Aqui46")
+        #lista_nome = request.form.getlist('lista_nome[0]')
+        #lista_valor = request.form.getlist('lista_valor')
+        print(id)
+        #print(listar_valor)
+        #print(algoritmo.algoritmo)
+
+        #frase2 = ["param1", "param2", "param3", "param4"]
+        #for p in param:
+            #frase = frase.replace("<<" + str(p) + ">>", frase2[1])
+
+
         arquivo.write(algoritmo.algoritmo)
         arquivo.write('\n\n\n\n')
         arquivo.close()
@@ -559,6 +556,72 @@ def instanciar_algoritmo_funciona(id):
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
 
     return "Ok"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Acho que não funciona
+@app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
+def instanciar_algoritmo(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
+
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        arquivo = open(url_arquivo_usuario, "r+")
+        """
+        Caso eu precise ler o arquivo 
+        for linha in arquivo:
+            linha = linha.rstrip()
+            print(linha)
+        """
+        #algoritmos = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
+        algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
+
+        for a in algoritmo:
+            print(a.algoritmo)
+            arquivo.write(a.algoritmo)
+            arquivo.write('\n\n\n\n')
+
+        arquivo.close()
+
+        import importlib
+
+        #classe = importlib.import_module("app.controllers.algoritmos.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos" + ".Eigenfaces")
+        pacote = importlib.import_module("app.controllers.algoritmos.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos")
+        print(type(pacote))
+        #print(dir(classe))
+        #algoritmo_escolhido = pacote.nomeDoAlgoritmo()
+
+        #print(dir(svm))
+        algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+        svm="A"
+        return render_template('algoritmo/listar-algoritmos.html', algoritmos=algoritmos, svm=svm)
+    else:
+        os.mkdir(url_pasta_usuario)
+        os.system("touch " + url_arquivo_usuario)
+        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+
+    return "Ok"
+
+
+
 
 
 

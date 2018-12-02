@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import os
 
-class Trainner(object):
+class Treinar(object):
     def __init__(self):
         #self.eigenface = cv2.face.createEigenFaceRecognizer() #Não colocar os números aqui dentro
         self.eigenface = cv2.face.EigenFaceRecognizer_create()  # Não colocar os números aqui dentro
@@ -10,8 +10,8 @@ class Trainner(object):
         #self.lbph = cv2.face.createLBPHFaceRecognizer()
 
     def get_face_id(self):
-        #List the files in the database_faces and add the directory
-        path = [os.path.join('database_faces', f) for f in os.listdir('database_faces')]
+        #List the files in the banco_de_faces and add the directory
+        path = [os.path.join('banco_de_faces', f) for f in os.listdir('banco_de_faces')]
         faces, ids = [], []
 
         for path_user in path:
@@ -24,7 +24,7 @@ class Trainner(object):
 
     def eigenface_trainer(self, faces, ids):
         self.eigenface.train(faces, ids)
-        self.eigenface.save("classifiers/classify_eigen_yale.yml")
+        self.eigenface.save("classificadores/classify_eigen_yale.yml")
         return True
 
     #Para o recognizer

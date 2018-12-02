@@ -9,3 +9,6 @@ https://github.com/kelvins/Reconhecimento-Facial/tree/master/FaceRecognition/alg
 
 Enviar lista POST
 https://stackoverflow.com/questions/24808660/sending-a-form-array-to-flask
+
+
+Fazer um pós processamento com SVM talvez... A partir da detecção do cascade verificar se é realmente um rosto e um olho
