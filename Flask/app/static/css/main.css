@@ -1,10 +1,11 @@
 body{
 
+
+    padding: 0px;
+    margin: 0px;
+
 }
 
-
-/* Index Page
- */
 .header{
     margin-top: 10px;
     margin-bottom: 10px;
@@ -15,52 +16,102 @@ body{
     z-index: 0;
 }
 
+
+.capa{
+    background-image: url(../images/capa.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 670px;
+
+}
+
+
+/*
+Index
+*/
+
+/*
+    Nav
+*/
+
+.container-fluid > .navbar-header > a {
+    color: #FFFFFF;
+}
+.container-fluid > .navbar-header > a:hover{
+    color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav > li > a{
+    color: #FFFFFF;
+}
+
+.navbar-default .navbar-nav > li > a:hover{
+    color: #101010;
+}
+
+.navbar-default .navbar-nav > li > a:before{
+    color: #FF0000;
+}
+
+.nav-geral{
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    height: 0px;
+    margin-bottom: 1px;
+}
+
+.nav-auxiliar{
+    background-color: rgba(30,39,41,.9);
+    height: 30px;
+    color: #FFFFFF;
+    text-align: right;
+}
+
 .navbar-default{
-    background-color: #000100;
+    font-size: 18px;
+    text-color: #FFFFFF;
+    border-color: #000000;
+    background-color: rgba(1,1,200,.5);
+
+}
+
+/* Nav Título*/
+.navbar-brand {
+    font-size: 35px;
+    color: #FF0000;
+    text-color: #FF0000;
 }
 
 
-.save, .snap{
-    float: left;
+
+.nav-principal ul li a{
+  color: #FF0000;
+  text-color: #FF0000;
 }
 
-.imagem-perfil {
-    background-color: #FF0000;
-    width: 40px;
-    height: 40px;
-    border-radius: 40px;
-    margin-top: 5px;
-    margin-right: 15px;
+
+
+
+
+.nav_nome_perfil{
+    font-size: 18px;
 }
 
-.botao-cadastrar-se{
-    margin-top: 2px;
-}
-.nav_bar {
-    float: left;
+.nav_icone-perfil{
     color: #FFFFFF;
-    text-decoration: none;
-    margin-bottom: 10px;
+    font-size: 16px;
 }
 
-.nav_bar ul{
-    text-decoration: none;
+.dropdown{
+   color: #00FF00;
 }
 
-.nav_bar ul li{
-    float: left;
-    color: #FFFFFF;
-    margin-left: 25px;
 
-}
-
-.nav_bar ul li{
-    text-align: center;
-    width: 100px;
-    background-color: black;
-    border-radius: 10px ;
-    list-style: none;
-}
+/*
+    Capturar
+*/
 
 .janela_capturar {
     height: 100px;
@@ -75,6 +126,10 @@ body{
     height: 325px;
 }
 
+
+/*
+    Footer
+*/
 footer{
     margin-top-min: 800px;
     background-color: #000000;
@@ -83,3 +138,14 @@ footer{
     line-height: 50px;
     text-align: center;
 }
+
+
+.imagem-perfil {
+    background-color: #FF0000;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    margin-top: 5px;
+    margin-right: 15px;
+}
+s

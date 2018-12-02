@@ -5,7 +5,7 @@ class VideoCamera(object):
     Documentação da Classe
     """
     def __init__(self):
-        self.captura = cv2.VideoCapture(1)
+        self.captura = cv2.VideoCapture(0)
 
     def __del__(self):
         self.captura.release()

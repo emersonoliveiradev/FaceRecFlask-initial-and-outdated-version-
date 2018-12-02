@@ -711,7 +711,7 @@ def atual():
 ##############
 @app.route("/cadastrar-se")
 def cadastrar():
-    return render_template('cadastrar.html')
+    return render_template('login.html')
 
 
 if __name__ == '__main__':
