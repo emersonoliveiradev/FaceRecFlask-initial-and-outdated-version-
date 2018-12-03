@@ -1,6 +1,29 @@
 <div class="nav-geral">
+
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-warning">
+                {% for message in get_flashed_messages() %}
+                    <li>
+                        {{ message }}
+                    </li>
+                {% endfor %}
+                </div>
+            {% endif %}
+    {% endwith %}
+
     <div class="nav-auxiliar">
-        asd
+        <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+            <div class="input-group">
+              <div class="input-group-append">
+                <input type="text" class="form-control nav-pesquisar" placeholder="Pesquisar por..." aria-label="Pesquisar">
+
+                <button class="btn btn-primary nav-pesquisar-icone" type="button">
+                  <i class="glyphicon glyphicon-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
     </div>
     <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -31,6 +54,8 @@
                                 <li><a href="/listar-usuarios">Usuários</a></li>
                                 <li><a href="/listar-algoritmos">Algoritmos</a></li>
                                 <li><a href="/mapear-algoritmo">Mapear</a></li>
+                                <li><a href="/execucao-dashboard">Execução</a></li>
+
 
                             </ul>
                         </li>
@@ -46,15 +71,18 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <img src="" class="imagem-perfil">
-                                <li><a href="/mostrar_captura">Perfil</a></li>
-                                <li><a href="/reconhecer_face">Sair</a></li>
+                                <li><a href="/perfil.html">Perfil</a></li>
+                                <li><a href="/logout">Sair</a></li>
                             </ul>
                         </li>
+
                         <li><a href="/ajuda">Ajuda</a></li>
 
                     </ul>
                 </div>
             </div>
+
+
     </nav>
 
 </div>

@@ -714,5 +714,18 @@ def cadastrar():
     return render_template('login.html')
 
 
+
+#############
+#Execução####
+#############
+@app.route("/execucao-dashboard")
+def execucao_dashboard():
+    return render_template('execucao/execucao-dashboard.html')
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
