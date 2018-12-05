@@ -1,0 +1,50 @@
+#Esse serve para muitos pasta-dos-usuarios 30/09/18
+"""
+@app.route('/instanciar-algoritmo-funciona/<int:id>', methods=['GET'])
+def instanciar_algoritmo_funciona(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
+
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        arquivo = open(url_arquivo_usuario, "r+")
+        
+        #Caso eu precise ler o arquivo
+        #for linha in arquivo:
+        #    linha = linha.rstrip()
+        #    print(linha)
+        
+        # pasta-dos-usuarios = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
+        pasta-dos-usuarios = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+        lista_de_algoritmos = []
+        for algoritmo in pasta-dos-usuarios:
+            lista_de_algoritmos.append(algoritmo)
+
+        for a in lista_de_algoritmos:
+            print(a.algoritmo)
+            arquivo.write(a.algoritmo)
+            arquivo.write('\n\n\n\n')
+
+        arquivo.close()
+
+        import importlib
+        algoritmo_escolhido = importlib.import_module(
+            "app.controllers.pasta-dos-usuarios.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos")
+        # print(dir(algoritmo_escolhido))
+        svm = algoritmo_escolhido.SVM()
+
+        # print(dir(svm))
+        pasta-dos-usuarios = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
+        return render_template('algoritmo/listar-pasta-dos-usuarios.html', pasta-dos-usuarios=pasta-dos-usuarios, svm=svm)
+        # return "OK2"
+    else:
+        os.mkdir(url_pasta_usuario)
+        os.system("touch " + url_arquivo_usuario)
+        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+
+    return "Ok"
+
+#########
+"""
