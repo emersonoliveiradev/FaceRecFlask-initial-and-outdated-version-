@@ -1,3 +1,6 @@
+__autor__ = "Emerson Pereira Oliveira"
+__email__ = "emersonhaw@gmail.com"
+
 # -*- coding: utf-8 -*-
 
 #####################
@@ -61,6 +64,8 @@ def ajuda():
 #######################################################################
 @app.route("/mostrar_captura")
 def mostrar_captura():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
     return render_template('captura.html')
 
 #################################################################################################
@@ -68,6 +73,8 @@ def mostrar_captura():
 #################################################################################################
 @app.route('/capturar_face')
 def capturar_face():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
     return Response(gen_capturar(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 ####################################################################
@@ -86,6 +93,8 @@ def gen_capturar():
 ####################################################################################
 @app.route('/reconhecer_face')
 def reconhecer_face():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
     return render_template('reconhecer.html')
 
 ############################################################################################################
@@ -122,9 +131,6 @@ def gen(camera):
     while True:
         frame = camera.get_encoded_frame()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
-
-
 
 
 
@@ -289,15 +295,16 @@ def atualizar_algoritmo(id=None):
     return redirect(url_for('listar_algoritmos'))
 
 
+
 ########################################################
 ##Caminho raiz da pasta dos algoritmosdentro do sistema#
 ########################################################
 base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/controllers/pasta-dos-usuarios/"
 
 
-##########################################################
-##Mapeamento dos parâmetros da função criada pelo usuário#
-##########################################################
+##################################################################
+##Mapeamento dos parâmetros da função criada pelo usuário - Busca#
+##################################################################
 @app.route('/mapear-algoritmo/<int:id>', methods=['GET'])
 def mapear_algoritmo(id):
     if not current_user.get_id():
@@ -344,6 +351,7 @@ def mapear_algoritmo(id):
         os.mkdir(url_pasta_usuario)
         os.mkdir(url_pasta_usuario + "/algoritmos")
         os.mkdir(url_pasta_usuario + "/arquivos-cascade")
+        os.mkdir(url_pasta_usuario + "/arquivos-imagem-e-video")
         os.mkdir(url_pasta_usuario + "/arquivos-de-reconhecimento")
         os.mkdir(url_pasta_usuario + "/bancos-de-faces")
         os.system("touch " + url_arquivo_usuario)
@@ -388,17 +396,59 @@ def mapeado_algoritmo(id):
             arquivo.write('\n\n\n\n')
             arquivo.close()
 
-
     return "ok"
     #return redirect(url_for('instanciar_algoritmo_funciona', id=id, lista_nome=lista_nome, lista_valor=lista_valor))
     #return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
+#
+
+###########Continuar daqui
+# Processar a execução
+####################################################################################
+##2.1 - Cria o template processar-execucao.html (Ela chama a rota ZZZZZZZZ#
+####################################################################################
+@app.route('/processar-execucao', methods=['GET','POST'])
+def processar_execucao():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    return render_template('/execucao/processar-execucao.html')
 
 
-########Continuar daqui
+############################################################################################################
+##2.2 - Usado pelo reconhecer_face. Retorna a imagem passada pela Função Geradora gerador_reconhecer_face()#
+############################################################################################################
+@app.route('/gerador-processar-execucao')
+def gerador_processar_execucao():
+    algo = app.controllers.pasta - dos - usuarios.u_1_Emerson.algoritmos.auxiliar
+    print("Aquiiii")
+    print(type(algo))
+    return Response(gerador_execucao(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-#############################################################################
-#Objetivo aqui é colocar no arquivo apenas o algoritmo que eu vou instanciar#
-#############################################################################
+########################################################################
+##2.3 - Tratamento do frame (detectar face e reconhecer)e yield gerador#
+########################################################################
+def gerador_execucao():
+    rec = Reconhecer()
+    while True:
+
+        frame = rec.rec_detectar()
+        #if frame == False:
+#            continue
+ #       yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Ignorar esse
 @app.route('/instanciar-algoritmo-funciona/<int:id>', methods=['GET'])
 def instanciar_algoritmo_funciona(id):
     if not current_user.get_id():
@@ -435,78 +485,6 @@ def instanciar_algoritmo_funciona(id):
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
 
     return "Ok2"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Acho que não funciona
-@app.route('/instanciar-algoritmo/<int:id>', methods=['GET'])
-def instanciar_algoritmo(id):
-    if not current_user.get_id():
-        return redirect(url_for('login'))
-
-    url_pasta_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome
-    url_arquivo_usuario = base_url + "usuario_" + current_user.get_id() + "_" + current_user.nome + "/MeusAlgoritmos.py"
-
-    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
-        arquivo = open(url_arquivo_usuario, "r+")
-        """
-        Caso eu precise ler o arquivo 
-        for linha in arquivo:
-            linha = linha.rstrip()
-            print(linha)
-        """
-        #pasta-dos-usuarios = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
-        algoritmo = Algoritmo.query.filter_by(id=id, usuario=current_user.get_id()).all()
-
-        for a in algoritmo:
-            print(a.algoritmo)
-            arquivo.write(a.algoritmo)
-            arquivo.write('\n\n\n\n')
-
-        arquivo.close()
-
-        import importlib
-
-        #classe = importlib.import_module("app.controllers.pasta-dos-usuarios.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos" + ".Eigenfaces")
-        pacote = importlib.import_module("app.controllers.pasta-dos-usuarios.usuario_" + current_user.get_id() + "_" + current_user.nome + ".MeusAlgoritmos")
-        print(type(pacote))
-        #print(dir(classe))
-        #algoritmo_escolhido = pacote.nomeDoAlgoritmo()
-
-        #print(dir(svm))
-        algoritmos = Algoritmo.query.filter_by(usuario=current_user.get_id()).all()
-        svm="A"
-        return render_template('algoritmo/listar-pasta-dos-usuarios.html', algoritmos=algoritmos, svm=svm)
-    else:
-        os.mkdir(url_pasta_usuario)
-        os.system("touch " + url_arquivo_usuario)
-        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
-
-    return "Ok"
-
-
-
-
-
-
-
-
-
 
 
 

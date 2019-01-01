@@ -12,7 +12,7 @@ reconhecedor.read("classificadores/classify_eigen_yale.yml")
 
 largura, altura = 220, 220
 font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-camera = cv2.VideoCapture(1)
+camera = cv2.VideoCapture()
 
 
 lista_faces_cadastradas = ["Emerson", "Wanderson"]
