@@ -17,7 +17,7 @@ from app.controllers.gerador import Gerador
 ########################
 ##Formulários e tabelas#
 ########################
-from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm
+from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm, DefinirParametrosExecucaoForm
 from app.models.tables import Algoritmo, Pessoa, Usuario
 
 ##############################
@@ -599,7 +599,15 @@ def cadastrar():
 #############
 @app.route("/execucao-dashboard")
 def execucao_dashboard():
-    return render_template('execucao/execucao-dashboard.html')
+    form_execucao = DefinirParametrosExecucaoForm()
+    return render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
+
+
+@app.route("/execucao-mapear")
+def execucao_mapear():
+    id = request.get.form("id")
+    print(id)
+    return render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
 
 
 

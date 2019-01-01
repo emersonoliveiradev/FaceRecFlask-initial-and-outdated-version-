@@ -1,7 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, PasswordField, BooleanField
+from wtforms.fields import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.widgets import TextArea
 from wtforms.validators import DataRequired
+
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from app.models.tables import Usuario, Algoritmo
+from app import current_user
 
 class LoginForm(FlaskForm):
     email = StringField("email", validators=[DataRequired()])
@@ -27,3 +31,12 @@ class DefinirParametrosForm(FlaskForm):
     p2 = StringField("p2", validators=[DataRequired()])
     p3 = StringField("p3", validators=[DataRequired()])
 
+class DefinirParametrosExecucaoForm(FlaskForm):
+    usuarios = QuerySelectField('Usuario', query_factory=lambda: Usuario.query.all(),
+                               get_label='nome', allow_blank=True,
+                               blank_text=(u'Selecione um usuário'), get_pk=lambda x: x.id)
+
+    algoritmos = QuerySelectField('Algoritmo', query_factory=lambda: Algoritmo.query.filter_by(usuario=current_user.get_id()),
+                               get_label='nome',  allow_blank=True,
+                               blank_text=(u'Selecione um algoritmo'), get_pk=lambda x: x.id)
+    enviar = SubmitField("Enviar")
