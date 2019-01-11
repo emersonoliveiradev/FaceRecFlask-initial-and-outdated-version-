@@ -8,7 +8,7 @@ detectorFace = cv2.CascadeClassifier("classificadores/haarcascade-frontalface-de
 
 # Teria que escolher na interface gráfica
 reconhecedor = cv2.face.EigenFaceRecognizer_create()
-reconhecedor.read("classificadores/classify_eigen_yale.yml")
+reconhecedor.read("classificadores/classify-eigen-yale.yml")
 
 largura, altura = 220, 220
 font = cv2.FONT_HERSHEY_COMPLEX_SMALL

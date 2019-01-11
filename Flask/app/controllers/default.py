@@ -28,6 +28,11 @@ from app.models.tables import Algoritmo, Pessoa, Usuario
 ##############################
 import os
 
+##########
+## Operações nas imagens
+#############
+import cv2
+
 
 ##########
 ##Básicas#
@@ -241,7 +246,7 @@ def cadastrar_algoritmos():
             return redirect(url_for('listar_algoritmos'))
 
     form = CadastrarAlgoritmoForm()
-    return render_template('algoritmo/cadastrar-pasta-dos-usuarios.html', form=form)
+    return render_template('algoritmo/cadastrar-pasta_dos_usuarios.html', form=form)
 
 
 @app.route('/listar-algoritmos', methods=['GET'])
@@ -299,7 +304,7 @@ def atualizar_algoritmo(id=None):
 ########################################################
 ##Caminho raiz da pasta dos algoritmosdentro do sistema#
 ########################################################
-base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/controllers/pasta-dos-usuarios/"
+base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/controllers/pasta_dos_usuarios/"
 
 
 ##################################################################
@@ -396,7 +401,7 @@ def mapeado_algoritmo(id):
             arquivo.write('\n\n\n\n')
             arquivo.close()
 
-    return "ok"
+    return "ok-Sim"
     #return redirect(url_for('instanciar_algoritmo_funciona', id=id, lista_nome=lista_nome, lista_valor=lista_valor))
     #return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
 #
@@ -410,7 +415,6 @@ def mapeado_algoritmo(id):
 def processar_execucao():
     if not current_user.get_id():
         return redirect(url_for('login'))
-
     return render_template('/execucao/processar-execucao.html')
 
 
@@ -419,24 +423,38 @@ def processar_execucao():
 ############################################################################################################
 @app.route('/gerador-processar-execucao')
 def gerador_processar_execucao():
-    algo = app.controllers.pasta - dos - usuarios.u_1_Emerson.algoritmos.auxiliar
-    print("Aquiiii")
-    print(type(algo))
     return Response(gerador_execucao(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 ########################################################################
 ##2.3 - Tratamento do frame (detectar face e reconhecer)e yield gerador#
 ########################################################################
 def gerador_execucao():
-    rec = Reconhecer()
+    #rec = Reconhecer()
+    from app.controllers.pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
+    rec = ReconhecimentoFacial()
     while True:
+        lista = rec.reconhecer_desenhar()
+        if lista == "Finalizado":
+            #Terminou
+            pass
+        frame = lista['imagem_encode']
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        if lista['s_deteccao'] == True:
+            processar_execucao_recortar(lista)
+            # Salvar no banco
 
-        frame = rec.rec_detectar()
-        #if frame == False:
-#            continue
- #       yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+def processar_execucao_recortar(lista):
+    face_recortada = []
+    for i in range(0, lista['n_faces']):
+        face_recortada[i] =
 
 
+    print("Frame Detectado!!!!!!!!!!!!!!!")
+
+
+# Criar rota para recortar as faces detectadas e salvar
+# Depois criar rota para exibir os resultados na tela
 
 
 

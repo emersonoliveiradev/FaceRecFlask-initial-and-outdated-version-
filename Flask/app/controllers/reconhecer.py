@@ -10,8 +10,8 @@ class Reconhecer(object):
     def __init__(self):
         self.treinar = Treinar()
         self.reconhecer_eiggen = self.treinar.get_eiggen()
-        #self.eiggen_recognizer.load("app/controllers/classificadores/classify_eigen_yale.yml")  # Refazer e colocar para pegar Usuario + restante
-        self.reconhecer_eiggen.read("app/controllers/classificadores/classify_eigen_yale.yml")  # Refazer e colocar para pegar Usuario + restante
+        #self.eiggen_recognizer.load("app/controllers/classificadores/classify-eigen-yale.yml")  # Refazer e colocar para pegar Usuario + restante
+        self.reconhecer_eiggen.read("app/controllers/classificadores/classify-eigen-yale.yml")  # Refazer e colocar para pegar Usuario + restante
         self.capturar = Capturar()
 
 

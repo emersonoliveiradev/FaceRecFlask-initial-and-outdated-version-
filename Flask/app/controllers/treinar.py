@@ -24,7 +24,7 @@ class Treinar(object):
 
     def eigenface_trainer(self, faces, ids):
         self.eigenface.train(faces, ids)
-        self.eigenface.save("classificadores/classify_eigen_yale.yml")
+        self.eigenface.save("classificadores/classify-eigen-yale.yml")
         return True
 
     #Para o recognizer
