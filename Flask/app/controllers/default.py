@@ -7,7 +7,7 @@ __email__ = "emersonhaw@gmail.com"
 ##Imports essenciais#
 #####################
 from app import app, db, login_manager, login_user, logout_user, login_required, current_user
-from flask import Flask, render_template, Response, request, redirect, url_for, flash
+from flask import Flask, render_template, Response, request, redirect, url_for, flash, session
 
 ###############################################
 ##Descobrir onde está a pasta root dos módulos#
@@ -21,7 +21,7 @@ from app.controllers.gerador import Gerador
 ##Formulários e tabelas#
 ########################
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm, DefinirParametrosExecucaoForm
-from app.models.tables import Algoritmo, Pessoa, Usuario
+from app.models.tables import Algoritmo, Pessoa, Usuario, Execucao, ImagemDaExecucao, FaceDaImagemDaExecucao
 
 ##############################
 ##Verificar outra alternativa#
@@ -43,6 +43,9 @@ import cv2
 def index():
     if not current_user.get_id():
         return redirect(url_for('login'))
+    session["num"] = "Simmmmmmmmmmmmmmmmmmmmmmm"
+    print(session)
+    print(session["num"])
     return render_template('index.html')
 
 ########
@@ -439,23 +442,63 @@ def gerador_execucao():
             pass
         frame = lista['imagem_encode']
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-        if lista['s_deteccao'] == True:
-            processar_execucao_recortar(lista)
-            # Salvar no banco
+        processar_execucao_final(lista)
 
 
-def processar_execucao_recortar(lista):
-    face_recortada = []
-    for i in range(0, lista['n_faces']):
-        face_recortada[i] =
 
 
-    print("Frame Detectado!!!!!!!!!!!!!!!")
+def processar_execucao_final(lista):
+    # Depois lembrar de pegar ou em uma sessão ou outra coisa, o algoritmo usado, aalgoritmo, arq_cascade e arq_reconhecimento
+    # Recortar faces para salvar no banco de dados
+    if lista['s_deteccao'] == True:
+        if lista['s_reconhecimento'] == True:
+            for face in lista['n_faces']:
+                print("Achou - " + str(face[0]))
+                print("Achou - " + str(face[1]))
+                print("Achou - " + str(face[2]))
+
+                #
+                # Ver como se cria uma sessão e criar uma apenas para o algoritmo usado, algoritmo, arq_cascade e arq_reconhecimento
+                # e demais dados informado no mapeamento
+
+                execucao = Execucao("Data", algoritmo, usuario)
+                db.session.add(algoritmo)
+                db.session.commit()
+                flash("Cadastro de algoritmo realizado com sucesso!")
+
+    # Salvar tudo
+
+
+
+
 
 
 # Criar rota para recortar as faces detectadas e salvar
 # Depois criar rota para exibir os resultados na tela
 
+
+# Criar tabela
+# Execucao
+#   id
+#   data
+#   algoritmo fk
+#   arq_cascade fk
+#   arq_reconhecimento fk
+#
+# Ex_imagens
+#   id
+#   imagem
+#   execucao fk
+#   s_deteccao
+#
+#
+# Ex_face_na_imagem
+#   id
+#   face
+#   s_reconhecimento
+#   id_reconhecimento
+#   conf_reconhecimento
+#   imagem fk
 
 
 
@@ -503,18 +546,6 @@ def instanciar_algoritmo_funciona(id):
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
 
     return "Ok2"
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
