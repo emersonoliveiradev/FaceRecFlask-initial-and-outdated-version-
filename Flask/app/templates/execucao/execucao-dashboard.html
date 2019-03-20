@@ -6,7 +6,7 @@
       <form action="/execucao-mapear" method="POST">
           <label>Nome</label>
               {{ form_execucao.csrf_token }}
-              {{ form_execucao.usuarios(class="form-control") }}
+              <!--usuário está vindo por padrão - current user-->
               {{ form_execucao.algoritmos(class="form-control") }}
               {{ form_execucao.enviar(class="form-control") }}
           <br><br>

@@ -1,30 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-        <title>VisionLab App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>VisionLab App</title>
 
-    </head>
-    <body >
-        {% if not current_user.id %}
-             <!--redirecionar para o login aqui-->
-        {% endif %}
+</head>
 
-<!--
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-warning">
-                {% for message in get_flashed_messages() %}
-                    <li>
-                        {{ message }}
-                    </li>
-                {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
--->
+<body>
+    <!--Navbar-->

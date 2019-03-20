@@ -38,3 +38,8 @@ if __name__ == '__main__':
     print("Trainning...")
     treinador.eigenface_trainer(faces, ids)
     print("Finish!")
+
+
+
+
+

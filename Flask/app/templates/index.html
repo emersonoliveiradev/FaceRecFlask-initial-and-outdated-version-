@@ -1,13 +1,10 @@
 {% include 'base/head.html' %}
-
-<div class="capa">
-    <img src="../images/capa.jpg" class="img-responsive capa" alt="">
-
-    {% include 'base/nav_bar.html' %}
-
+{% include 'base/nav_bar.html' %}
     <div>
-
         <div class="content">
+            <div class="capa">
+
+            </div>
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
@@ -17,12 +14,6 @@
                     <li data-target="#myCarousel" data-slide-to="2"></li>
                 </ol>
 
-                <style>
-                    .carousel-inner > .item > img, .carousel-inner > .item > a > img {
-                        width: 70%;
-                        margin: auto;
-                    }
-                </style>
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner" role="listbox">
                     <div class="item active">
@@ -73,8 +64,6 @@
 
 
 </div>
-
-
 
 
 {% include 'base/footer.html' %}

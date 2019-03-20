@@ -1,14 +1,26 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
-<a href="/cadastrar-usuarios">
-    <button class="btn btn-lg btn-success">
-        Cadastrar
-    </button>
-</a>
-<hr>
 
-<div class="table-responsive">
+<div class="container-principal">
+    <div class="cabecalho-listagem">
+        <div class="cabecalho-titulo">
+            Title
+        </div>
+        <div class="cabecalho-entrada">
+            <input type="text">
+        </div>
+        <div class="cabecalho-botao">
+            <a href="/cadastrar-usuarios">
+                <button class="btn btn-lg btn-success">
+                    Cadastrar
+                </button>
+            </a>
+        </div>
+
+    </div>
+    <hr>
+    <div class="table-responsive">
         <table class="table">
             <tr>
                 <th>Id</th>
@@ -18,45 +30,42 @@
                 <th>Data Nascimento</th>
                 <th>Atualizar</th>
                 <th>Remover</th>
-
             </tr>
             {% for u in usuarios %}
-                <tr>
-                    <td>
-                        {{ u.id}}
-                    </td>
-                    <td>
-                        {{ u.nome}}
-                    </td>
-                    <td>
-                        {{ u.email}}
-                    </td>
-                    <td>
-                        {{ u.cpf}}
-                    </td>
-                    <td>
-                        {{ u.dt_nascimento}}
-                    </td>
-                    <td>
-                        <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
-                        <a href="{{ url_for('atualizar_usuario', id=u.id)}}">
-                            <button class="btn btn-primary">
-                                Atualizar
-                            </button>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ url_for('excluir_usuario', id=u.id)}}">
-                            <button class="btn btn-danger">
-                                Remover
-                           </button>
-                        </a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    {{ u.id}}
+                </td>
+                <td>
+                    {{ u.nome}}
+                </td>
+                <td>
+                    {{ u.email}}
+                </td>
+                <td>
+                    {{ u.cpf}}
+                </td>
+                <td>
+                    {{ u.dt_nascimento}}
+                </td>
+                <td>
+                    <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
+                    <a href="{{ url_for('atualizar_usuario', id=u.id)}}">
+                        <button class="btn btn-primary">
+                            Atualizar
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('excluir_usuario', id=u.id)}}">
+                        <button class="btn btn-danger">
+                            Remover
+                        </button>
+                    </a>
+                </td>
+            </tr>
             {% endfor %}
-
         </table>
+    </div>
 </div>
 
-
-{% include 'base/footer.html' %}

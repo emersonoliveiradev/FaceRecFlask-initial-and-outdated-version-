@@ -17,6 +17,8 @@ from app.controllers.capturar import Capturar
 from app.controllers.reconhecer import Reconhecer
 from app.controllers.gerador import Gerador
 
+
+
 ########################
 ##Formulários e tabelas#
 ########################
@@ -409,6 +411,16 @@ def mapeado_algoritmo(id):
     #return "ok - O mapeamento está ok... Continuar a partir daqui para a rota de Instancia de algoritmo"
 #
 
+
+
+
+
+
+
+
+
+
+#############################Importante
 ###########Continuar daqui
 # Processar a execução
 ####################################################################################
