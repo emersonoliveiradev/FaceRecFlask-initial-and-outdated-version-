@@ -4,30 +4,33 @@
 
 <div class="container-principal">
     <div class="cabecalho-listagem">
-        <div class="cabecalho-titulo">
-            Title
+        <div class="col-md-4 cabecalho-titulo">
+            Usuários
         </div>
-        <div class="cabecalho-entrada">
-            <input type="text">
+        <div class="col-md-11 cabecalho-entrada">
+            <input class="col-md-3 entrada-listagem" type="text" >
+            <a  href="">
+                <button class="entypo-search cabecalho-botao-pesquisar">
+                </button>
+            </a>
         </div>
-        <div class="cabecalho-botao">
+        <div class="col-md-2 cabecalho-botao-cadastrar">
             <a href="/cadastrar-usuarios">
                 <button class="btn btn-lg btn-success">
                     Cadastrar
                 </button>
             </a>
         </div>
-
     </div>
-    <hr>
-    <div class="table-responsive">
-        <table class="table">
+
+    <div class="col-md-12 table-responsive">
+        <table class="col-md-12 table">
             <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>CPF</th>
-                <th>Data Nascimento</th>
+                <th class="col-md-1">Id</th>
+                <th class="col-md-2">Nome</th>
+                <th class="col-md-3">Email</th>
+                <th class="col-md-2">CPF</th>
+                <th class="col-md-3">Data Nascimento</th>
                 <th>Atualizar</th>
                 <th>Remover</th>
             </tr>
@@ -69,3 +72,4 @@
     </div>
 </div>
 
+{% include 'base/footer.html'%}

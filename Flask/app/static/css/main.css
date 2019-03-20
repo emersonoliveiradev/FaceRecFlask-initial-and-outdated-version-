@@ -1,5 +1,7 @@
 body{
-
+    background-color: #EEEEEE;
+    margin: 0px;
+    padding: 0px;
 }
 
 /*
@@ -72,8 +74,9 @@ Index
     text-color: #FFFFFF;
     margin-top: 0px;
     margin-bottom: 10px;
-    border-bottom: inset 7px rgba(100,100,200,.7);
-    border-top: inset 7px rgba(100,100,200,.7);
+    border-bottom: inset 3px rgba(100,100,200,.7);
+    border-top: inset 3px rgba(100,100,200,.7);
+
 }
 
 /* Nav Título*/
@@ -160,23 +163,43 @@ footer{
 
 .container-principal{
    clear: left;
-   margin-top: 5px;
+   margin-left: 10px;
+   margin-right: 10px;
+   box-shadow: 0px 0px 1em #666;
+   min-height: 560px;
 }
 
 .cabecalho-listagem{
-    background-color: #CCCCCC;
+    padding: 10px;
+    display: flex;
+    align-items: center; //centraliza horizontalmente
+    justify-content: center;
 }
 
 .cabecalho-titulo{
     float: left;
+    font-size: 32px;
 }
 
 .cabecalho-entrada{
-    float: left;
-}
-
-.cabecalho-botao{
 
 }
 
+.cabecalho-botao-pesquisar{
+
+
+}
+
+.cabecalho-botao-cadastrar{
+    align: right;
+}
+
+.entrada-listagem{
+    width: 600px;
+}
+
+.entypo-search{
+    width: 50px;
+    color: #000000;
+}
 
