@@ -8,8 +8,8 @@
             Usuários
         </div>
         <div class="col-md-11 cabecalho-entrada">
-            <input class="col-md-3 entrada-listagem" type="text" >
-            <a  href="">
+            <input class="col-md-3 entrada-listagem" type="text">
+            <a href="">
                 <button class="entypo-search cabecalho-botao-pesquisar">
                 </button>
             </a>
@@ -22,6 +22,9 @@
             </a>
         </div>
     </div>
+
+
+
 
     <div class="col-md-12 table-responsive">
         <table class="col-md-12 table">
@@ -54,9 +57,9 @@
                 <td>
                     <!--<a href="<?= base_url('index.php/User/update/' . $u->id) ?>" class="btn btn-primary btn-group">Atualizar</a>-->
                     <a href="{{ url_for('atualizar_usuario', id=u.id)}}">
-                        <button class="btn btn-primary">
-                            Atualizar
-                        </button>
+                    <button class="btn btn-primary">
+                        Atualizar
+                    </button>
                     </a>
                 </td>
                 <td>
@@ -72,4 +75,18 @@
     </div>
 </div>
 
-{% include 'base/footer.html'%}
+
+<!--Falta pegar o id do usuário para editá-lo. Passar do jinja para o javascript
+<script type="text/javascript">
+    $(function () {
+        $(".atualizar").click(function () {
+            var aux = $(this).closest('button').attr('id');
+            {% set aux = id %}
+            alert(id)
+
+        })
+    });
+</script>
+-->
+
+{% include 'base/footer.html' %}

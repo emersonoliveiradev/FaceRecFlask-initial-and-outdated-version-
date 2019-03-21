@@ -203,3 +203,9 @@ footer{
     color: #000000;
 }
 
+
+.btn-meu-modal{
+    text-align: right;
+    border-box: content;
+}
+

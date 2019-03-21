@@ -1,12 +1,50 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
-<a href="/listar-usuarios">
-    <button class="btn btn-lg btn-warning">
-        Voltar
-    </button>
-</a>
 
+<!-- Modal -->
+<div id="modal" class="modal dismiss" role="dialog" data-toggle="modal">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Atualizar usuário</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/atualizar-usuario/{{ usuario.id }}" method="POST">
+                    <label>Nome</label>
+                    {{ form.nome(class="form-control", value=usuario.nome) }}
+                    <label>E-mail</label>
+                    {{ form.email(class="form-control", value=usuario.email) }}
+                    <label>CPF</label>
+                    {{ form.cpf(class="form-control", value=usuario.cpf) }}
+                    <label>Data de Nascimento</label>
+                    {{ form.dt_nascimento(class="form-control", value=usuario.dt_nascimento) }}
+                    <br>
+                    <div class="btn-meu-modal">
+                        <a href="/listar-usuarios">
+                            <input class="btn btn-warning" value="Voltar">
+                        </a>
+                        <input class="btn btn-success" type="submit" value="Enviar">
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".modal").modal('show');
+    })
+
+
+</script>
+
+<!--
 <div>
       <br><br><br>
       <form action="/atualizar-usuario/{{ usuario.id }}" method="POST">
@@ -23,6 +61,6 @@
           <input class="btn btn-success" type="submit" value="Enviar">
       </form>
 </div>
-
+-->
 
 {% include 'base/footer.html' %}

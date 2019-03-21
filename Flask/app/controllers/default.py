@@ -181,7 +181,8 @@ def listar_usuarios():
         return redirect(url_for('login'))
 
     usuarios = Usuario.query.all()
-    return render_template('usuario/listar-usuarios.html', usuarios=usuarios)
+    form = CadastrarUsuarioForm()
+    return render_template('usuario/listar-usuarios.html', usuarios=usuarios, form=form)
 
 
 @app.route('/excluir-usuario/<int:id>', methods=['GET', 'POST'])
