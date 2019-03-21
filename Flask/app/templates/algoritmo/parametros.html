@@ -1,30 +1,37 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
+<div class="container-principal">
+    <div class="cabecalho-listagem">
+        <div class="col-md-10 cabecalho-titulo">
+            Atribua o valor desejado a cada parâmetro
+        </div>
+        <div class="col-md-2 cabecalho-botao-cadastrar">
+            <a href="/cadastrar-usuarios">
+                <button class="btn btn-lg btn-success">
+                    Cadastrar Novo
+                </button>
+            </a>
+        </div>
+    </div>
 
-<a href="/cadastrar-algoritmos">
-    <button class="btn btn-lg btn-success">
-        Cadastrar
-    </button>
-</a>
-
-<hr>
-
-<div>
-      <form action="/mapeado-algoritmo/{{ id_algoritmo }}" method="POST">
-          {% for p_nome in parametros: %}
-              <label>{{ p_nome }}</label>
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <form action="/mapeado-algoritmo/{{ id_algoritmo }}" method="POST">
+                {% for p_nome in parametros: %}
+                <label>{{ p_nome }}</label>
                 <!-- Cria uma lista de nome e outra de valor... sintaxe do flask-->
                 <!-- Depois ele entende a "indexação"-->
-                <input class="form-control" name="lista_nome[]"  value="{{ p_nome }}" type="hidden">
+                <input class="form-control" name="lista_nome[]" value="{{ p_nome }}" type="hidden">
                 <input class="form-control" name="lista_valor[]" type="text">
-          {% endfor%}
-          <input class="btn btn-success" type="submit" value="Enviar">
-      </form>
+                {% endfor%}
+                <br>
+                <input class="btn btn-success" type="submit" value="Enviar" style="float:right;">
+            </form>
+        </div>
+    </div>
+
 </div>
-
-
-
 
 
 {% include 'base/footer.html' %}

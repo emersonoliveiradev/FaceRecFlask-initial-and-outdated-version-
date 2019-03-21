@@ -36,9 +36,9 @@ class DefinirParametrosForm(FlaskForm):
 
 class DefinirParametrosExecucaoForm(FlaskForm):
     StringField("email", validators=[DataRequired()])
-    usuarios = QuerySelectField('Usuario', default=current_user)
+    usuarios = QuerySelectField('Usuario',
+                                default=current_user)
     algoritmos = QuerySelectField('Algoritmo',
                                   query_factory=lambda: Algoritmo.query.filter_by(usuario=current_user.get_id()),
                                   get_label='nome', allow_blank=True,
                                   blank_text=(u'Selecione um algoritmo'), get_pk=lambda x: x.id)
-    enviar = SubmitField("Enviar")

@@ -316,7 +316,7 @@ base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/co
 ##################################################################
 ##Mapeamento dos parâmetros da função criada pelo usuário - Busca#
 ##################################################################
-@app.route('/mapear-algoritmo/<int:id>', methods=['GET'])
+@app.route('/execucao-mapear-algoritmo/<int:id>', methods=['GET'])
 def mapear_algoritmo(id):
     if not current_user.get_id():
         return redirect(url_for('login'))
@@ -637,19 +637,67 @@ def cadastrar():
 #############
 #Execução####
 #############
-@app.route("/execucao-dashboard")
-def execucao_dashboard():
+@app.route("/execucao-escolher-algoritmo")
+def execucao_escolher_algoritmo():
     form_execucao = DefinirParametrosExecucaoForm()
-    return render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
+    return render_template('execucao/execucao-escolher-algoritmo.html', form_execucao=form_execucao)
 
 
-@app.route("/execucao-mapear", methods=['POST'])
-def execucao_mapear():
-    texto = request.form['algoritmos']
-    print(str(texto))
-    return "Oi"
-        #render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
+@app.route('/execucao-mapear-algoritmo', methods=['POST'])
+def execucao_mapear_algoritmo():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
 
+    id_algoritmo = request.form['algoritmos']
+
+    url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
+
+    # Existe a pasta e o arquivo?
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        arquivo = open(url_arquivo_usuario, "r+")
+        algoritmo = Algoritmo.query.filter_by(id=id_algoritmo, usuario=current_user.get_id()).first()
+
+        meu_algoritmo = algoritmo.algoritmo
+        # Lista_de_parametros = ["ValorA", "ValorB","ValorC","ValorD", "ValorE"]
+
+        # Mapear e identificar paramentros aqui
+        frase = meu_algoritmo
+        tamanho = len(frase)
+        param = []
+        i = 0
+
+        # Vasculha o código atrás das bandeiras
+        # Definido onde está a "bandeira" dos parâmetros definidos
+        # Extrai o nome do parâmetro
+        for i in range(0, tamanho):
+            if frase[i] == "<":
+                if frase[i + 1] == "<":
+                    j = i + 2
+                    for j in range(j, tamanho):
+                        if frase[j] == ">":
+                            if frase[j + 1] == ">":
+                                novo_parametro = ""             #Limpar a variável
+                                for c in range(i + 2, j):
+                                    novo_parametro += frase[c]
+                                param.append(novo_parametro)
+                                break
+
+        form_parametros = DefinirParametrosForm()
+        #Template que mostra os nomes dos parâmetros e os campos vazios pra preencher
+        return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
+    else:
+        #Criar a pasta do usuário e o arquivo
+        os.mkdir(url_pasta_usuario)
+        os.mkdir(url_pasta_usuario + "/algoritmos")
+        os.mkdir(url_pasta_usuario + "/arquivos-cascade")
+        os.mkdir(url_pasta_usuario + "/arquivos-imagem-e-video")
+        os.mkdir(url_pasta_usuario + "/arquivos-de-reconhecimento")
+        os.mkdir(url_pasta_usuario + "/bancos-de-faces")
+        os.system("touch " + url_arquivo_usuario)
+
+        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+        return redirect(url_for('mapear_algoritmo', id=id))
 
 
 

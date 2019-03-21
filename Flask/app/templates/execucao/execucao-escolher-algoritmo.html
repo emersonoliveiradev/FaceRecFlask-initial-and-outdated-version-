@@ -1,0 +1,34 @@
+{% include 'base/head.html' %}
+{% include 'base/nav_bar.html' %}
+
+
+<div class="container-principal">
+    <div class="cabecalho-listagem">
+        <div class="col-md-10 cabecalho-titulo">
+            Escolha um dos seus algoritmos cadastrados
+        </div>
+        <div class="col-md-2 cabecalho-botao-cadastrar">
+            <a href="/cadastrar-usuarios">
+                <button class="btn btn-lg btn-success">
+                    Cadastrar Novo
+                </button>
+            </a>
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <form action="/execucao-mapear-algoritmo" method="POST">
+                <label>Nome</label>
+                {{ form_execucao.csrf_token }}
+                <!--usuário está vindo por padrão - current user-->
+                {{ form_execucao.algoritmos(class="form-control") }}
+                <br>
+                <input class="btn btn-success" type="submit" value="Enviar" style="float:right;">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'base/footer.html' %}
