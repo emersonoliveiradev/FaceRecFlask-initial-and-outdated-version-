@@ -643,11 +643,12 @@ def execucao_dashboard():
     return render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
 
 
-@app.route("/execucao-mapear")
+@app.route("/execucao-mapear", methods=['POST'])
 def execucao_mapear():
-    id = request.get.form("id")
-    print(id)
-    return render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
+    texto = request.form['algoritmos']
+    print(str(texto))
+    return "Oi"
+        #render_template('execucao/execucao-dashboard.html', form_execucao=form_execucao)
 
 
 
