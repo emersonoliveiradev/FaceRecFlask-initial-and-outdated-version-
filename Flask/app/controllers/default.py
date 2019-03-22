@@ -1,3 +1,5 @@
+from builtins import classmethod
+
 __autor__ = "Emerson Pereira Oliveira"
 __email__ = "emersonhaw@gmail.com"
 
@@ -78,6 +80,7 @@ def mostrar_captura():
         return redirect(url_for('login'))
     return render_template('captura.html')
 
+
 #################################################################################################
 ##1.2 - Usado pelo mostrar_captura. Retorna a imagem passada pela Função Geradora gen_capturar()#
 #################################################################################################
@@ -86,6 +89,7 @@ def capturar_face():
     if not current_user.get_id():
         return redirect(url_for('login'))
     return Response(gen_capturar(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 ####################################################################
 ##1.3 - Tratamento do frame (detectar olhos e face) e yield gerador#
@@ -107,12 +111,14 @@ def reconhecer_face():
         return redirect(url_for('login'))
     return render_template('reconhecer.html')
 
+
 ############################################################################################################
 ##2.2 - Usado pelo reconhecer_face. Retorna a imagem passada pela Função Geradora gerador_reconhecer_face()#
 ############################################################################################################
 @app.route('/gerador_reconhecer_face')
 def gerador_reconhecer_face():
     return Response(gerador_reconhecer(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 ########################################################################
 ##2.3 - Tratamento do frame (detectar face e reconhecer)e yield gerador#
@@ -134,6 +140,7 @@ def video_feed():
     #Retorna o que o gerador (função gen()) está gerando
     return Response(gen(VideoCamera()), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 ###########
 ##Original#
 ###########
@@ -141,7 +148,6 @@ def gen(camera):
     while True:
         frame = camera.get_encoded_frame()
         yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
 
 
 ###########
@@ -228,7 +234,6 @@ def atualizar_usuario(id=None):
             db.session.commit()
         usuarios = Usuario.query.all()
         return redirect(url_for('listar_usuarios', usuarios=usuarios))
-
 
 
 ############
@@ -634,15 +639,37 @@ def cadastrar():
 
 
 
+
+
+
+
+
+
+
 #############
 #Execução####
 #############
 @app.route("/execucao-escolher-algoritmo")
 def execucao_escolher_algoritmo():
+    url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
+
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        pass
+    else:
+        os.mkdir(url_pasta_usuario)
+        os.mkdir(url_pasta_usuario + "/algoritmos")
+        os.mkdir(url_pasta_usuario + "/arquivos-cascade")
+        os.mkdir(url_pasta_usuario + "/arquivos-imagem-e-video")
+        os.mkdir(url_pasta_usuario + "/arquivos-de-reconhecimento")
+        os.mkdir(url_pasta_usuario + "/bancos-de-faces")
+        os.system("touch " + url_arquivo_usuario)
+        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+
     form_execucao = DefinirParametrosExecucaoForm()
     return render_template('execucao/execucao-escolher-algoritmo.html', form_execucao=form_execucao)
 
-
+# Ter opção de fazer upload de videos, arqs cascade e yaml
 @app.route('/execucao-mapear-algoritmo', methods=['POST'])
 def execucao_mapear_algoritmo():
     if not current_user.get_id():
@@ -653,23 +680,17 @@ def execucao_mapear_algoritmo():
     url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
 
-    # Existe a pasta e o arquivo?
     if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
         arquivo = open(url_arquivo_usuario, "r+")
         algoritmo = Algoritmo.query.filter_by(id=id_algoritmo, usuario=current_user.get_id()).first()
 
         meu_algoritmo = algoritmo.algoritmo
-        # Lista_de_parametros = ["ValorA", "ValorB","ValorC","ValorD", "ValorE"]
 
-        # Mapear e identificar paramentros aqui
         frase = meu_algoritmo
         tamanho = len(frase)
         param = []
         i = 0
 
-        # Vasculha o código atrás das bandeiras
-        # Definido onde está a "bandeira" dos parâmetros definidos
-        # Extrai o nome do parâmetro
         for i in range(0, tamanho):
             if frase[i] == "<":
                 if frase[i + 1] == "<":
@@ -684,20 +705,124 @@ def execucao_mapear_algoritmo():
                                 break
 
         form_parametros = DefinirParametrosForm()
-        #Template que mostra os nomes dos parâmetros e os campos vazios pra preencher
         return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
     else:
-        #Criar a pasta do usuário e o arquivo
-        os.mkdir(url_pasta_usuario)
-        os.mkdir(url_pasta_usuario + "/algoritmos")
-        os.mkdir(url_pasta_usuario + "/arquivos-cascade")
-        os.mkdir(url_pasta_usuario + "/arquivos-imagem-e-video")
-        os.mkdir(url_pasta_usuario + "/arquivos-de-reconhecimento")
-        os.mkdir(url_pasta_usuario + "/bancos-de-faces")
-        os.system("touch " + url_arquivo_usuario)
+        pass
 
+    flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
+    return redirect(url_for('mapear_algoritmo', id=id))
+
+
+@app.route('/execucao-algoritmo-mapeado', methods=['POST'])
+def excecucao_algoritmo_mapeado():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    id_algoritmo = request.form['id_algoritmo']
+
+    if request.method == "POST":
+        lista_nome = request.form.getlist("lista_nome[]")
+        lista_valor = request.form.getlist("lista_valor[]")
+        url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
+        url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
+
+        if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+            arquivo = open(url_arquivo_usuario, "r+")
+            algoritmo = Algoritmo.query.filter_by(id=id_algoritmo, usuario=current_user.get_id()).first()
+            meu_algoritmo = algoritmo.algoritmo
+            i=0
+            for p in lista_nome:
+                meu_algoritmo = meu_algoritmo.replace("<<" + str(p) + ">>", lista_valor[i])
+                i+=1
+
+            arquivo.write(meu_algoritmo)
+            arquivo.write('\n\n\n\n')
+            arquivo.close()
+
+    return render_template('/execucao/execucao-processar-execucao.html')
+
+
+# Acho que nem precisa...
+@app.route('/execucao-instanciar-algoritmo/<int:id>', methods=['GET'])
+def execucao_instanciar_algoritmo(id):
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+
+    url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
+    url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
+
+    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
+        arquivo = open(url_arquivo_usuario, "r+")
+        #Retorna um objeto do tipo Algoritmo com seus atributos (id, nome, algoritmo, usuario)
+        algoritmo = Algoritmo.query.filter_by(usuario=current_user.get_id(), id=id).first()
+        arquivo.write(algoritmo.algoritmo)
+        arquivo.write('\n\n\n\n')
+        arquivo.close()
+        print(algoritmo.algoritmo)
+    else:
+        os.mkdir(url_pasta_usuario)
+        os.system("touch " + url_arquivo_usuario)
         flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
-        return redirect(url_for('mapear_algoritmo', id=id))
+
+    return render_template('/execucao/processar-execucao.html')
+
+
+##2.1 - Cria o template processar-execucao.html (Ela chama a rota ZZZZZZZZ#
+####################################################################################
+@app.route('/execucao-processar-execucao', methods=['GET','POST'])
+def execucao_processar_execucao():
+    if not current_user.get_id():
+        return redirect(url_for('login'))
+    return render_template('/execucao/processar-execucao.html')
+
+
+############################################################################################################
+##2.2 - Usado pelo reconhecer_face. Retorna a imagem passada pela Função Geradora gerador_reconhecer_face()#
+############################################################################################################
+@app.route('/execucao-gerador-processar-execucao')
+def execucao_gerador_processar_execucao():
+    print("1 - Entrouuuuuuuu" + str(current_user.get_id()))
+    return Response(execucao_gerador_execucao(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+# Criar seção e ir adicionando algoritmo, usuário....
+
+##Erro. o current_id não está nesse escopo. "Usar sessões"
+
+@app.route('/execucao-gerador-execucao')
+def execucao_gerador_execucao():
+    print("2 - Entrouuuuuuuu" + str(current_user.get_id()))
+    from app.controllers.pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
+    rec = ReconhecimentoFacial()
+    while True:
+        lista = rec.reconhecer_desenhar()
+        print(type(lista))
+        if lista == "Finalizado":
+            pass
+            # Terminou
+        frame = lista['imagem_encode']
+        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        execucao_processar_execucao_final(lista)
+
+
+def execucao_processar_execucao_final(lista):
+    # Depois lembrar de pegar ou em uma sessão ou outra coisa, o algoritmo usado, aalgoritmo, arq_cascade e arq_reconhecimento
+    # Recortar faces para salvar no banco de dados
+    if lista['s_deteccao'] == True:
+        if lista['s_reconhecimento'] == True:
+            for face in lista['n_faces']:
+                print("Achou - " + str(face[0]))
+                print("Achou - " + str(face[1]))
+                print("Achou - " + str(face[2]))
+                print(current_user.nome())
+                #
+                # Ver como se cria uma sessão e criar uma apenas para o algoritmo usado, algoritmo, arq_cascade e arq_reconhecimento
+                # e demais dados informado no mapeamento
+                execucao = Execucao("Data", 1, usuario)
+                db.session.add(algoritmo)
+                db.session.commit()
+                flash("Cadastro de algoritmo realizado com sucesso!")
+
 
 
 

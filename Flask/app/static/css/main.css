@@ -1,17 +1,19 @@
+/*
+    Body
+*/
 body{
     background-color: #EEEEEE;
     margin: 0px;
     padding: 0px;
 }
 
+
 /*
     Login
 */
-
 .login{
     background-color: #000000;
 }
-
 
 alert alert-warning{
     margin: 0px;
@@ -21,6 +23,12 @@ alert alert-warning{
 }
 
 
+
+
+
+/*
+    Index
+*/
 .capa{
     background-image: url(../images/capa.jpg);
     background-repeat: no-repeat;
@@ -30,13 +38,8 @@ alert alert-warning{
 
 
 /*
-Index
-*/
-
-/*
     Nav
 */
-
 .container-fluid > .navbar-header > a {
     color: #FFFFFF;
 }
@@ -57,10 +60,6 @@ Index
     color: #FF0000;
 }
 
-.container-nav{
-
-}
-
 .navbar{
     background: rgba(1,1,50,.8);
     width: 100%;
@@ -79,22 +78,17 @@ Index
 
 }
 
-/* Nav Título*/
+/* Nav Título */
 .navbar-brand {
     font-size: 35px;
     color: #FF0000;
     text-color: #FF0000;
 }
 
-
-
 .nav-principal ul li a{
   color: #FF0000;
   text-color: #FF0000;
 }
-
-
-
 
 .nav_nome_perfil{
     font-size: 18px;
@@ -113,7 +107,6 @@ Index
 /*
     Capturar
 */
-
 .janela_capturar {
     height: 100px;
     background-color: #000000;
@@ -128,18 +121,6 @@ Index
 }
 
 
-
-/*
-    Footer
-*/
-footer{
-    margin-top-min: 800px;
-    background-color: #000000;
-    color: #FFFFFF;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-}
 
 
 .imagem-perfil {
@@ -158,9 +139,9 @@ footer{
 }
 
 
-/* Listagens */
-
-
+/*
+    Listagens
+*/
 .container-principal{
    clear: left;
    margin-left: 10px;
@@ -185,10 +166,7 @@ footer{
 
 }
 
-.cabecalho-botao-pesquisar{
-
-
-}
+.cabecalho-botao-pesquisar{ }
 
 .cabecalho-botao-cadastrar{
     align: right;
@@ -209,3 +187,23 @@ footer{
     border-box: content;
 }
 
+
+/*
+    Flash messages
+*/
+.mensagens-flash{
+    margin:0px;
+}
+
+
+/*
+    Footer
+*/
+footer{
+    margin-top-min: 800px;
+    background-color: #000000;
+    color: #FFFFFF;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
