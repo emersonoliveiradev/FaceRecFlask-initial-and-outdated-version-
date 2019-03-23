@@ -48,7 +48,7 @@ def index():
     if not current_user.get_id():
         return redirect(url_for('login'))
     session["num"] = "Simmmmmmmmmmmmmmmmmmmmmmm"
-    print(session)
+    session["id_user"] = current_user.get_id()
     print(session["num"])
     return render_template('index.html')
 
@@ -675,6 +675,10 @@ def execucao_mapear_algoritmo():
     if not current_user.get_id():
         return redirect(url_for('login'))
 
+    session["usuario"] = current_user.get_id()
+    session["algoritmo"] = request.form['algoritmos']
+
+    print(session)
     id_algoritmo = request.form['algoritmos']
 
     url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
@@ -739,7 +743,7 @@ def excecucao_algoritmo_mapeado():
             arquivo.write('\n\n\n\n')
             arquivo.close()
 
-    return render_template('/execucao/execucao-processar-execucao.html')
+    return render_template('/execucao/processar-execucao.html')
 
 
 # Acho que nem precisa...
@@ -781,28 +785,30 @@ def execucao_processar_execucao():
 ############################################################################################################
 @app.route('/execucao-gerador-processar-execucao')
 def execucao_gerador_processar_execucao():
-    print("1 - Entrouuuuuuuu" + str(current_user.get_id()))
     return Response(execucao_gerador_execucao(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 
 # Criar seção e ir adicionando algoritmo, usuário....
 
 ##Erro. o current_id não está nesse escopo. "Usar sessões"
 
-@app.route('/execucao-gerador-execucao')
+
 def execucao_gerador_execucao():
-    print("2 - Entrouuuuuuuu" + str(current_user.get_id()))
     from app.controllers.pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
     rec = ReconhecimentoFacial()
-    while True:
-        lista = rec.reconhecer_desenhar()
-        print(type(lista))
-        if lista == "Finalizado":
-            pass
-            # Terminou
-        frame = lista['imagem_encode']
-        yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-        execucao_processar_execucao_final(lista)
+    with app.app_context():
+        with app.test_request_context():
+            while True:
+                lista = rec.reconhecer_desenhar()
+                print(type(lista))
+                session["id_user"] = "Obrigado"
+                print(session["id_user"])
+                if lista == "Finalizado":
+                    break
+                frame = lista['imagem_encode']
+                yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+                #execucao_processar_execucao_final(lista)
 
 
 def execucao_processar_execucao_final(lista):
@@ -822,6 +828,13 @@ def execucao_processar_execucao_final(lista):
                 db.session.add(algoritmo)
                 db.session.commit()
                 flash("Cadastro de algoritmo realizado com sucesso!")
+
+@app.route('/execucao-relatorio')
+def excecucao_relatorio():
+    return render_template('/execucao/execucao-relatorio.html')
+
+
+
 
 
 
