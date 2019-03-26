@@ -31,6 +31,7 @@ from app.models.tables import Algoritmo, Pessoa, Usuario, Execucao, ImagemDaExec
 ##Verificar outra alternativa#
 ##############################
 import os
+from datetime import datetime
 
 ##########
 ## Operações nas imagens
@@ -48,7 +49,6 @@ def index():
     if not current_user.get_id():
         return redirect(url_for('login'))
     session["num"] = "Simmmmmmmmmmmmmmmmmmmmmmm"
-    session["id_user"] = current_user.get_id()
     print(session["num"])
     return render_template('index.html')
 
@@ -675,10 +675,10 @@ def execucao_mapear_algoritmo():
     if not current_user.get_id():
         return redirect(url_for('login'))
 
-    session["usuario"] = current_user.get_id()
-    session["algoritmo"] = request.form['algoritmos']
+    session["id_usuario"] = current_user.get_id()
+    session["id_algoritmo"] = request.form['algoritmos']
 
-    print(session)
+
     id_algoritmo = request.form['algoritmos']
 
     url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
@@ -722,7 +722,9 @@ def excecucao_algoritmo_mapeado():
     if not current_user.get_id():
         return redirect(url_for('login'))
 
+    #Remover do HTML. usar o valor da session e fazer a verificação da existẽncia dele
     id_algoritmo = request.form['id_algoritmo']
+
 
     if request.method == "POST":
         lista_nome = request.form.getlist("lista_nome[]")
@@ -746,38 +748,7 @@ def excecucao_algoritmo_mapeado():
     return render_template('/execucao/processar-execucao.html')
 
 
-# Acho que nem precisa...
-@app.route('/execucao-instanciar-algoritmo/<int:id>', methods=['GET'])
-def execucao_instanciar_algoritmo(id):
-    if not current_user.get_id():
-        return redirect(url_for('login'))
 
-    url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
-    url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
-
-    if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
-        arquivo = open(url_arquivo_usuario, "r+")
-        #Retorna um objeto do tipo Algoritmo com seus atributos (id, nome, algoritmo, usuario)
-        algoritmo = Algoritmo.query.filter_by(usuario=current_user.get_id(), id=id).first()
-        arquivo.write(algoritmo.algoritmo)
-        arquivo.write('\n\n\n\n')
-        arquivo.close()
-        print(algoritmo.algoritmo)
-    else:
-        os.mkdir(url_pasta_usuario)
-        os.system("touch " + url_arquivo_usuario)
-        flash("Pasta do usuário e Arquivo do usuário criados com sucesso!")
-
-    return render_template('/execucao/processar-execucao.html')
-
-
-##2.1 - Cria o template processar-execucao.html (Ela chama a rota ZZZZZZZZ#
-####################################################################################
-@app.route('/execucao-processar-execucao', methods=['GET','POST'])
-def execucao_processar_execucao():
-    if not current_user.get_id():
-        return redirect(url_for('login'))
-    return render_template('/execucao/processar-execucao.html')
 
 
 ############################################################################################################
@@ -785,49 +756,53 @@ def execucao_processar_execucao():
 ############################################################################################################
 @app.route('/execucao-gerador-processar-execucao')
 def execucao_gerador_processar_execucao():
-    return Response(execucao_gerador_execucao(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(execucao_gerador_execucao(id_usuario=session["id_usuario"], id_algoritmo=session["id_algoritmo"], now=datetime.now().strftime('%Y-%m-%d %H:%M:%S')), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
+#https://sempreupdate.com.br/python-import-e-chamada-de-metodo-dinamica/
+#https://stackoverflow.com/questions/14071135/import-file-using-string-as-name
+#http://www.logicus.com.br/alguns-exemplos-do-modulo-sys-no-python/
 
-# Criar seção e ir adicionando algoritmo, usuário....
 
-##Erro. o current_id não está nesse escopo. "Usar sessões"
-
-
-def execucao_gerador_execucao():
-    from app.controllers.pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
-    rec = ReconhecimentoFacial()
+# Problemas de escopo
+def execucao_gerador_execucao(id_usuario, id_algoritmo, now):
     with app.app_context():
         with app.test_request_context():
+            session["eu"] = "Emerson"
+            #print(session)
+
+            #caminho = "app.controllers.pasta_dos_usuarios.u_ " + "" + id_usuario + "_Emerson.algoritmos.auxiliar"
+            #print(caminho)
+            #from app.controllers.pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
+            #Fazer  isso ficar variável - id_usuário
+            #caminho = __import__('pasta.auxiliar')
+            caminho = __import__('pasta.auxiliar')
+            print(dir(caminho))
+            rec = getattr(caminho, 'ReconhecimentoFacial')
+            rec2 = rec()
+
+            #from caminho import ReconhecimentoFacial
+
             while True:
-                lista = rec.reconhecer_desenhar()
+                lista = rec2.reconhecer_desenhar()
                 print(type(lista))
-                session["id_user"] = "Obrigado"
-                print(session["id_user"])
                 if lista == "Finalizado":
                     break
                 frame = lista['imagem_encode']
                 yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-                #execucao_processar_execucao_final(lista)
+                execucao_processar_execucao_final(lista, id_algoritmo, now)
 
 
-def execucao_processar_execucao_final(lista):
+def execucao_processar_execucao_final(lista, id_algoritmo, now):
     # Depois lembrar de pegar ou em uma sessão ou outra coisa, o algoritmo usado, aalgoritmo, arq_cascade e arq_reconhecimento
     # Recortar faces para salvar no banco de dados
     if lista['s_deteccao'] == True:
         if lista['s_reconhecimento'] == True:
             for face in lista['n_faces']:
-                print("Achou - " + str(face[0]))
-                print("Achou - " + str(face[1]))
-                print("Achou - " + str(face[2]))
-                print(current_user.nome())
-                #
-                # Ver como se cria uma sessão e criar uma apenas para o algoritmo usado, algoritmo, arq_cascade e arq_reconhecimento
-                # e demais dados informado no mapeamento
-                execucao = Execucao("Data", 1, usuario)
-                db.session.add(algoritmo)
+                execucao = Execucao(now, id_algoritmo)
+                db.session.add(execucao)
                 db.session.commit()
-                flash("Cadastro de algoritmo realizado com sucesso!")
+                #flash("Cadastro de algoritmo realizado com sucesso!")
 
 @app.route('/execucao-relatorio')
 def excecucao_relatorio():
@@ -835,7 +810,7 @@ def excecucao_relatorio():
 
 
 
-
+# Continuar do relatório... SAlvar na seção e no BD
 
 
 
