@@ -658,7 +658,12 @@ def execucao_escolher_algoritmo():
         pass
     else:
         os.mkdir(url_pasta_usuario)
+        #Adicionar o caminho de todos os usuários aqui
+        os.system("touch " + base_url + "/__init__.py")
         os.mkdir(url_pasta_usuario + "/algoritmos")
+        # Adicionar o caminho de todos os usuários aqui
+
+        os.system("touch " + base_url + "/__init__.py")
         os.mkdir(url_pasta_usuario + "/arquivos-cascade")
         os.mkdir(url_pasta_usuario + "/arquivos-imagem-e-video")
         os.mkdir(url_pasta_usuario + "/arquivos-de-reconhecimento")
@@ -677,12 +682,12 @@ def execucao_mapear_algoritmo():
 
     session["id_usuario"] = current_user.get_id()
     session["id_algoritmo"] = request.form['algoritmos']
-
-
     id_algoritmo = request.form['algoritmos']
+
 
     url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
+
 
     if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
         arquivo = open(url_arquivo_usuario, "r+")

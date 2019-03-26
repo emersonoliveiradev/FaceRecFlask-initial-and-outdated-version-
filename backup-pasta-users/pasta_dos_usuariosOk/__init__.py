@@ -1,0 +1,1 @@
+from .u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
