@@ -1,1 +1,0 @@
-from auxiliar import ReconhecimentoFacial

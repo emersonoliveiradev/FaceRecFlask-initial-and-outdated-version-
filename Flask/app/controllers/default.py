@@ -315,7 +315,7 @@ def atualizar_algoritmo(id=None):
 ########################################################
 ##Caminho raiz da pasta dos algoritmosdentro do sistema#
 ########################################################
-base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/app/controllers/pasta_dos_usuarios/"
+base_url = "/home/emerson/PycharmProjects/FaceRecFlask/FaceRecFlask/Flask/pasta_dos_usuarios/"
 
 
 ##################################################################
@@ -776,7 +776,7 @@ def execucao_gerador_execucao(id_usuario, id_algoritmo, now):
             #from app.controllers.pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar import ReconhecimentoFacial
             #Fazer  isso ficar variável - id_usuário
             #caminho = __import__('pasta.auxiliar')
-            caminho = __import__('pasta.auxiliar')
+            caminho = __import__('pasta_dos_usuarios.u_1_Emerson.algoritmos.auxiliar')
             print(dir(caminho))
             rec = getattr(caminho, 'ReconhecimentoFacial')
             rec2 = rec()
