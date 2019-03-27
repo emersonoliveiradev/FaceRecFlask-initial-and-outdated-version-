@@ -1,75 +1,59 @@
+# -*- coding: utf-8 -*-
+
+#Verificar necessidade disso 27/03/19
 from builtins import classmethod
 
 __autor__ = "Emerson Pereira Oliveira"
 __email__ = "emersonhaw@gmail.com"
 
-# -*- coding: utf-8 -*-
 
-#####################
-##Imports essenciais#
-#####################
+# Imports essenciais
 from app import app, db, login_manager, login_user, logout_user, login_required, current_user
 from flask import Flask, render_template, Response, request, redirect, url_for, flash, session
 
-###############################################
-##Descobrir onde está a pasta root dos módulos#
-###############################################
+
+# Descobrir onde está a pasta root dos módulos
 from app.controllers.camera import VideoCamera
 from app.controllers.capturar import Capturar
 from app.controllers.reconhecer import Reconhecer
 from app.controllers.gerador import Gerador
 
 
-
-########################
-##Formulários e tabelas#
-########################
+# Formulários e tabelas
 from app.models.forms import LoginForm, CadastrarAlgoritmoForm, CadastrarUsuarioForm, DefinirParametrosForm, DefinirParametrosExecucaoForm
 from app.models.tables import Algoritmo, Pessoa, Usuario, Execucao, ImagemDaExecucao, FaceDaImagemDaExecucao
 
-##############################
-##Verificar outra alternativa#
-##############################
+
+# Verificar outra alternativa
 import os
 from datetime import datetime
 
-##########
-## Operações nas imagens
-#############
+
+# Operações com imagens
 import cv2
 
 
-##########
-##Básicas#
-##########
+# Básicas
 @app.route('/home')
 @app.route('/index')
 @app.route('/')
 def index():
     if not current_user.get_id():
         return redirect(url_for('login'))
-    session["num"] = "Simmmmmmmmmmmmmmmmmmmmmmm"
-    print(session["num"])
     return render_template('index.html')
 
-########
-##Criar#
-########
+
+# Criar
 @app.route("/sobre")
 def sobre():
     return render_template('sobre.html')
 
-########
-##Criar#
-########
+
+# Criar
 @app.route("/ajuda")
 def ajuda():
     return render_template('ajuda.html')
 
-
-#########
-##Câmera#
-#########
 
 #######################################################################
 ##1.1 - Cria o template captura.html (Ele chama a rota /capturar_face)#
@@ -329,6 +313,7 @@ def mapear_algoritmo(id):
     url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
 
+
     # Existe a pasta e o arquivo?
     if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
         arquivo = open(url_arquivo_usuario, "r+")
@@ -363,9 +348,17 @@ def mapear_algoritmo(id):
         #Template que mostra os nomes dos parâmetros e os campos vazios pra preencher
         return render_template('algoritmo/parametros.html', form_parametros=form_parametros, parametros=param, id_algoritmo=algoritmo.id)
     else:
-        #Criar a pasta do usuário e o arquivo
+        #Criar as pastas do usuário e o arquivo
         os.mkdir(url_pasta_usuario)
         os.mkdir(url_pasta_usuario + "/algoritmos")
+        os.system("touch " + url_pasta_usuario + "__init__.py")
+        if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_pasta_usuario + "__init__.py"):
+            arquivo = open(url_pasta_usuario + "__init__.py", "r")
+            conteudo = arquivo.readlines()
+            conteudo.append("from .algoritmos.auxiliar import ReconhecimentoFacial")
+            arquivo.write(conteudo)
+            arquivo.close()
+
         os.mkdir(url_pasta_usuario + "/arquivos-cascade")
         os.mkdir(url_pasta_usuario + "/arquivos-imagem-e-video")
         os.mkdir(url_pasta_usuario + "/arquivos-de-reconhecimento")
@@ -654,6 +647,15 @@ def execucao_escolher_algoritmo():
     url_pasta_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome
     url_arquivo_usuario = base_url + "u_" + current_user.get_id() + "_" + current_user.nome + "/algoritmos/auxiliar.py"
 
+    arquivo = open(base_url + "/__init__.py", "a+")
+    arquivo.write("\nfrom .u_" + current_user.get_id() + "_" + current_user.nome + ".algoritmos.auxiliar import ReconhecimentoFacial")
+    arquivo.close()
+
+    arquivo = open(url_pasta_usuario + "/__init__.py", "w")
+    arquivo.write("\nfrom .algoritmos.auxiliar import ReconhecimentoFacial")
+    arquivo.close()
+
+
     if os.path.isdir(url_pasta_usuario) and os.path.isfile(url_arquivo_usuario):
         pass
     else:
@@ -728,6 +730,8 @@ def excecucao_algoritmo_mapeado():
         return redirect(url_for('login'))
 
     #Remover do HTML. usar o valor da session e fazer a verificação da existẽncia dele
+
+
     id_algoritmo = request.form['id_algoritmo']
 
 
@@ -785,8 +789,6 @@ def execucao_gerador_execucao(id_usuario, id_algoritmo, now):
             print(dir(caminho))
             rec = getattr(caminho, 'ReconhecimentoFacial')
             rec2 = rec()
-
-            #from caminho import ReconhecimentoFacial
 
             while True:
                 lista = rec2.reconhecer_desenhar()
