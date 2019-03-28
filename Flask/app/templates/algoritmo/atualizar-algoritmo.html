@@ -1,25 +1,36 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
-<a href="/listar-algoritmos">
-        <button class="btn btn-lg btn-warning">
-            Voltar
-        </button>
-    </a>
-    <hr>
-
-<div>
-      <form action="/atualizar-algoritmo/{{ algoritmo.id }}" method="POST">
-          <label>Nome</label>
-              {{ form.nome(class="form-control", value=algoritmo.nome) }}
-          <label>AlgoritmoCerto</label>
-              <textarea class="form-control" rows="5" name="algoritmo">{{ algoritmo.algoritmo }}</textarea>
-          <!--Verificar como definir o valor do form  textarea-->
-          <label>Senha</label>
-              {{ form.usuario(class="form-control", value=algoritmo.usuario) }}
-          <input class="btn btn-success" type="submit" value="Enviar">
-      </form>
+<div id="modal" class="modal dismiss" role="dialog" data-toggle="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Atualizar Algoritmo</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/atualizar-algoritmo/{{ algoritmo.id }}" method="POST">
+                    <label>Nome</label>
+                    {{ form.nome(class="form-control", value=algoritmo.nome) }}
+                    <label>AlgoritmoCerto</label>
+                    <textarea class="form-control" rows="5" name="algoritmo">{{ algoritmo.algoritmo }}</textarea>
+                    <br>
+                    <div class="btn-meu-modal">
+                        <a href="/listar-algoritmos">
+                            <input class="btn btn-warning" value="Voltar">
+                        </a>
+                        <input class="btn btn-success" type="submit" value="Enviar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script type="text/javascript">
+    $(function () {
+        $(".modal").modal('show');
+    })
+</script>
 
 {% include 'base/footer.html' %}

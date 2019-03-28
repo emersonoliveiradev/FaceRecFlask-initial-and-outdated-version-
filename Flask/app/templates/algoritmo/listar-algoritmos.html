@@ -2,109 +2,80 @@
 {% include 'base/nav_bar.html' %}
 
 
-<a href="/cadastrar-algoritmos">
-    <button class="btn btn-lg btn-success">
-        Cadastrar
-    </button>
-</a>
-<hr>
+<div class="container-principal">
+    <div class="cabecalho-listagem">
+        <div class="col-md-4 cabecalho-titulo">
+            Algoritmos
+        </div>
+        <div class="col-md-11 cabecalho-entrada">
+            <input class="col-md-3 entrada-listagem" type="text">
+            <a href="">
+                <button class="entypo-search cabecalho-botao-pesquisar">
+                </button>
+            </a>
+        </div>
+        <div class="col-md-2 cabecalho-botao-cadastrar">
+            <a href="/cadastrar-algoritmo">
+                <button class="btn btn-lg btn-success">
+                    Cadastrar
+                </button>
+            </a>
+        </div>
+    </div>
 
-<div class="table-responsive">
-    <form action="#">
-        <table class="table">
-            <tr>
-                <th>Id</th>
-                <th>Usuário</th>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th>Algoritmo</th>
-                <th>Excluir</th>
-                <th>Editar</th>
-            </tr>
-            {% for a in algoritmos %}
-            <tr>
-                <td>
-                    {{ a.id }}
-                </td>
-                <td>
-                    {{ current_user.nome }}
-                </td>
-                <td>
-                    {{ a.nome }}
-                </td>
-                <td>
-                    Criar atributo descrição
-                </td>
-                <td>
-                    <pre>{{ a.algoritmo }}</pre>
-                </td>
-                <td>
-                    <a href="{{ url_for('atualizar_algoritmo', id=a.id)}}">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#atualizarModalCenter">
-                            Atualizar
-                        </button>
-                    </a>
-                </td>
-                <td>
-                    <a href="{{ url_for('excluir_algoritmo', id=a.id)}}">
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirModalCenter">
-                            Remover
-                        </button>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </form>
-</div>
-{{ svm }}
+
+    <div class="table-responsive">
+        <form action="#">
+            <table class="table">
+                <tr>
+                    <th>Id</th>
+                    <th>Usuário</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Algoritmo</th>
+                    <th>Excluir</th>
+                    <th>Editar</th>
+                </tr>
+                {% for a in algoritmos %}
+                <tr>
+                    <td>
+                        {{ a.id }}
+                    </td>
+                    <td>
+                        {{ current_user.nome }}
+                    </td>
+                    <td>
+                        {{ a.nome }}
+                    </td>
+                    <td>
+                        Descrição aqui
+                    </td>
+                    <td style="max-width: 600px;">
+                        <pre>{{ a.algoritmo }}</pre>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('atualizar_algoritmo', id=a.id)}}">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#atualizarModalCenter">
+                                Atualizar
+                            </button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('excluir_algoritmo', id=a.id)}}">
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#excluirModalCenter">
+                                Remover
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+
 
 
 <!--http://www.bogotobogo.com/python/Flask/Python_Flask_Blog_App_Tutorial_4.php-->
-
-
-
-<!-- Modal Atualizar -->
-<div class="modal fade" id="atualizarModalCenter" tabindex="-1" role="dialog" aria-labelledby="atualizarModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="atualizarModalLongTitle">Atualizar Algoritmo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Atualizar -->
-<div class="modal fade" id="excluirModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="excluirModalLongTitle">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 {% include 'base/footer.html' %}

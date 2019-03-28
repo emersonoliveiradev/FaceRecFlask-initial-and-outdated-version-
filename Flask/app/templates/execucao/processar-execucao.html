@@ -1,20 +1,39 @@
 {% include 'base/head.html' %}
 {% include 'base/nav_bar.html' %}
 
-    <!--Put the streaming in the page*/-->
-    <div>
-        <div>
-            <div class="window_capture">
-                <img id="b" src="{{ url_for('execucao_gerador_processar_execucao') }}">
-            </div>
+
+<div class="container-principal">
+    <div class="cabecalho-listagem">
+        <div class="col-md-4 cabecalho-titulo">
+            Execução
+        </div>
+        <div class="col-md-11 cabecalho-entrada">
+            <!--Centro-->
+        </div>
+        <div class="col-md-2 cabecalho-botao-cadastrar">
             <a href="/execucao-relatorio">
-                <button class="btn btn-success">
-                    Clique aqui ao fim da execução
+                <button class="btn btn-lg btn-success">
+                    Finalizar
                 </button>
             </a>
-
         </div>
     </div>
+    <div class="col-md-4">
+         <div style="margin-left: 15px;">
+            <div class="window_capture">
+                <img id="b" src="{{ url_for('execucao_gerador_processar_execucao') }}" style="min-width:400px; min-height:300px; max-width:400px; max-height:300px; width: auto; height: auto;">
+            </div>
+            <div style="margin: 0 auto; text-align: center;">
+            <br>
+            <a href="/execucao-relatorio">
+                <button class="btn btn-success" style="margin: 0 auto;">
+                    Clique aqui ao fim da execução!
+                </button>
+            </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% include 'base/footer.html' %}
