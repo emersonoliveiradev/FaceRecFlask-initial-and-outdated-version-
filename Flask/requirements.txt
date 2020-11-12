@@ -24,7 +24,7 @@ python-editor==1.0.3
 pytz==2017.3
 scipy==1.0.0
 six==1.11.0
-SQLAlchemy==1.2.0
+SQLAlchemy==1.3.0
 svgwrite==1.1.12
 Werkzeug==0.13
 WTForms==2.1
