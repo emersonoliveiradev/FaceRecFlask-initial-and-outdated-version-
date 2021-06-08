@@ -16,7 +16,7 @@ MarkupSafe==1.0
 matplotlib==2.1.1
 numpy==1.15.0
 olefile==0.44
-Pillow==4.3.0
+Pillow==8.2.0
 pyparsing==2.2.0
 pytesseract==0.2.0
 python-dateutil==2.6.1
